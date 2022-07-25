@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
         {
             Strafe();
         }
-        
     }
 
     private void SwitchSide(StrafeSide strafeSide)
@@ -60,12 +59,12 @@ public class PlayerController : MonoBehaviour
     {
         if (_targetStrafe == StrafeSide.Left)
         {
-            _controller.Move(new Vector3(-1, 0, 0) * (StrafeSpeed * Time.deltaTime));
+            _controller.Move(Vector3.left * (StrafeSpeed * Time.deltaTime));
         }
 
         if (_targetStrafe == StrafeSide.Right)
         {
-            _controller.Move(new Vector3(1, 0, 0) * (StrafeSpeed * Time.deltaTime));
+            _controller.Move(Vector3.right * (StrafeSpeed * Time.deltaTime));
         }
     }
 
@@ -76,6 +75,6 @@ public class PlayerController : MonoBehaviour
     
     private bool IsReadyToStrafe()
     {
-        return Math.Abs(_transform.position.x - _targetSidePosition) > 0;
+        return Math.Abs(_transform.position.x - _targetSidePosition) > 0.04;
     }
 }
