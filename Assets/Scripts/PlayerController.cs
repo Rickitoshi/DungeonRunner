@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private Transform _transform;
     private float _targetSidePosition;
-    private StrafeSide _targetStrafe;
+    private StrafeDirection _targetStrafe;
 
     private void Start()
     {
@@ -23,11 +23,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
-            SwitchSide(StrafeSide.Right);
+            SwitchSide(StrafeDirection.Right);
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            SwitchSide(StrafeSide.Left);
+            SwitchSide(StrafeDirection.Left);
         }
     }
 
@@ -41,28 +41,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void SwitchSide(StrafeSide strafeSide)
+    private void SwitchSide(StrafeDirection strafeDirection)
     {
-        if (strafeSide == StrafeSide.Left && _targetSidePosition > -StrafeDistance)
+        if (strafeDirection == StrafeDirection.Left && _targetSidePosition > -StrafeDistance)
         {
             _targetSidePosition -= StrafeDistance;
-            _targetStrafe = StrafeSide.Left;
+            _targetStrafe = StrafeDirection.Left;
         }
-        if (strafeSide == StrafeSide.Right && _targetSidePosition < StrafeDistance)
+        if (strafeDirection == StrafeDirection.Right && _targetSidePosition < StrafeDistance)
         {
             _targetSidePosition += StrafeDistance;
-            _targetStrafe = StrafeSide.Right;
+            _targetStrafe = StrafeDirection.Right;
         }
     }
     
     private void Strafe()
     {
-        if (_targetStrafe == StrafeSide.Left)
+        if (_targetStrafe == StrafeDirection.Left)
         {
             _controller.Move(Vector3.left * (StrafeSpeed * Time.deltaTime));
         }
 
-        if (_targetStrafe == StrafeSide.Right)
+        if (_targetStrafe == StrafeDirection.Right)
         {
             _controller.Move(Vector3.right * (StrafeSpeed * Time.deltaTime));
         }
