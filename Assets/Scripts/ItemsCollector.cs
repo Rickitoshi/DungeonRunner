@@ -7,4 +7,9 @@ public class ItemsCollector : MonoBehaviour, IItemsCollector
         print(cost);
         Destroy(coin.gameObject);
     }
+
+    public void PickUp(Magnet magnet)
+    {
+        Destroy(magnet.gameObject);
+    }
 }

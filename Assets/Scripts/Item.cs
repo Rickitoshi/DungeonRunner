@@ -2,24 +2,23 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
-    [SerializeField] private float PickUpRadius;
+    [SerializeField] private float PickUpRadius = 1f;
     
-    protected bool isCollectorDetected(out IItemsCollector ItemsCollector )
+    protected bool isCollectorDetected(out IItemsCollector itemsCollector )
     {
         Collider[] entities = Physics.OverlapSphere(transform.position, PickUpRadius);
         if (entities.Length > 0)
         {
             foreach (var entity in entities)
             {
-                if (entity.TryGetComponent(out IItemsCollector itemsCollector))
+                if (entity.TryGetComponent(out itemsCollector))
                 {
-                    ItemsCollector = itemsCollector;
                     return true;
                 }
             }
         }
 
-        ItemsCollector = null;
+        itemsCollector = null;
         return false;
     }
 
