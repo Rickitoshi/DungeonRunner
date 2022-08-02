@@ -6,9 +6,9 @@ public class Coin : Item
 
     private void Update()
     {
-        if (isCollectorDetected(out IItemsCollector itemsCollector))
+        if (isVisitorDetected(out IItemVisitor itemVisitor))
         {
-            itemsCollector.PickUp(this, Cost);
+            itemVisitor.Visit(this, Cost);
         }
     }
     
