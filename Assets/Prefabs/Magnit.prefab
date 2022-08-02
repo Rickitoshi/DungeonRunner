@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 429fa2f211e95a347ba571e9a4e031ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickUpRadius: 0.3
+  PickUpRadius: 0.4
 --- !u!1 &7470292398784027470
 GameObject:
   m_ObjectHideFlags: 0

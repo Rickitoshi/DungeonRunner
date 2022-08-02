@@ -4,7 +4,7 @@ using UnityEngine;
 public class ItemsCollector : MonoBehaviour, IItemVisitor
 {
     [SerializeField] private float MagnetDuration = 5;
-    [SerializeField] private float ItemMoveSpeed = 5;
+    [SerializeField] private float ItemMoveSpeed = 11;
     [SerializeField] private Vector3 MagnetZone;
 
     private bool _isMagnetActive;
@@ -47,6 +47,7 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     private void ActivateMagnet()
     {
         _isMagnetActive = true;
+        print("Active");
         StartCoroutine(DeactivateMagnet());
     }
 
@@ -54,6 +55,7 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     {
         yield return new WaitForSeconds(MagnetDuration);
         _isMagnetActive = false;
+        print("Deactive");
     }
 
     private void OnDrawGizmos()
