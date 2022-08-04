@@ -11,53 +11,51 @@ public class PlayerController : MonoBehaviour
     [Header("Jump")] 
     [SerializeField] private float JumpHeight = 1;
     [SerializeField] private float GravityValue = -9.81f;
+    
+    public bool IsGrounded{ get; private set; }
 
     private CharacterController _controller;
-    private Transform _transform;
     private float _targetSidePosition;
     private StrafeDirection _targetStrafe;
-    private bool _isGrounded;
     private Vector3 _velocity;
+    private StateManager _stateManager;
+    private RunState _runState;
+    private IdleState _idleState;
+    private FailState _failState;
+
+    private void Awake()
+    {
+        _controller = GetComponent<CharacterController>();
+        _stateManager = new StateManager();
+        _runState = new RunState(this);
+        _idleState = new IdleState();
+        _failState = new FailState();
+    }
 
     private void Start()
     {
-        _controller = GetComponent<CharacterController>();
-        _transform = GetComponent<Transform>();
+        _stateManager.Initialize(_runState);
     }
 
-    
+
     private void Update()
     {
         CheckGround();
-        
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            SwitchSide(StrafeDirection.Right);
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            SwitchSide(StrafeDirection.Left);
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
-        {
-            Jump();
-        }
-        
+        _stateManager.CurrentState.Update();
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
-        MoveForward();
+        _stateManager.CurrentState.FixedUpdate();
         Gravity();
-
+        
         if (IsReadyToStrafe())
         {
             Strafe();
         }
-        
     }
 
-    private void SwitchSide(StrafeDirection strafeDirection)
+    public void SwitchSide(StrafeDirection strafeDirection)
     {
         if (strafeDirection == StrafeDirection.Left && _targetSidePosition > -StrafeDistance)
         {
@@ -69,6 +67,21 @@ public class PlayerController : MonoBehaviour
             _targetSidePosition += StrafeDistance;
             _targetStrafe = StrafeDirection.Right;
         }
+    }
+    
+    public void MoveForward()
+    {
+        _controller.Move(Vector3.forward * (MoveSpeed  * Time.deltaTime));
+    }
+    
+    public void Jump()
+    {
+        _velocity.y += Mathf.Sqrt(JumpHeight * -2.0f * GravityValue);
+    }
+    
+    private bool IsReadyToStrafe()
+    {
+        return Math.Abs(transform.position.x - _targetSidePosition) > 0.04;
     }
     
     private void Strafe()
@@ -86,31 +99,16 @@ public class PlayerController : MonoBehaviour
 
     private void CheckGround()
     {
-        _isGrounded = _controller.isGrounded;
-        if (_isGrounded && _velocity.y < 0)
+        IsGrounded = _controller.isGrounded;
+        if (IsGrounded && _velocity.y < 0)
         {
             _velocity.y = 0f;
         }
-    }
-
-    private void Jump()
-    {
-        _velocity.y += Mathf.Sqrt(JumpHeight * -2.0f * GravityValue);
     }
 
     private void Gravity()
     {
         _velocity.y += GravityValue * Time.deltaTime;
         _controller.Move(_velocity * Time.deltaTime);
-    }
-
-    private void MoveForward()
-    {
-        _controller.Move(Vector3.forward * (MoveSpeed  * Time.deltaTime));
-    }
-    
-    private bool IsReadyToStrafe()
-    {
-        return Math.Abs(_transform.position.x - _targetSidePosition) > 0.04;
     }
 }
