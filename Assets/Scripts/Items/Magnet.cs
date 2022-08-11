@@ -2,11 +2,8 @@ using UnityEngine;
 
 public class Magnet : Item
 {
-    private void Update()
+    protected override void Visit(IItemVisitor itemVisitor)
     {
-        if (isVisitorDetected(out IItemVisitor itemVisitor))
-        {
-            itemVisitor.Visit(this);
-        }
+        itemVisitor.Visit(this);
     }
 }

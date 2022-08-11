@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RunState : IState
 {
-    private PlayerController _player;
+    private readonly PlayerController _player;
 
     public RunState(PlayerController player)
     {
@@ -11,12 +11,10 @@ public class RunState : IState
     
     public void Enter()
     {
-        Debug.Log("Enter RunState");
     }
 
     public void Exit()
     {
-        Debug.Log("Exit RunState");
     }
 
     public void Update()

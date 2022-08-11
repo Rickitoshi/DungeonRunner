@@ -4,6 +4,7 @@ public abstract class Item : MonoBehaviour, IItemCollectorVisitor
 {
     [SerializeField] private float PickUpRadius = 1f;
 
+    private Collider[] _overlapColliders = new Collider[4];
     private bool _isReadyMove;
     private ItemsCollector _target;
     private float _moveSpeed;
@@ -24,30 +25,30 @@ public abstract class Item : MonoBehaviour, IItemCollectorVisitor
         {
             transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _moveSpeed * Time.deltaTime);
         }
+        SearchVisitor();
     }
 
-    protected bool isVisitorDetected(out IItemVisitor itemVisitor )
+    private void SearchVisitor()
     {
-        Collider[] entities = Physics.OverlapSphere(transform.position, PickUpRadius);
-        if (entities.Length > 0)
+        int count = Physics.OverlapSphereNonAlloc(transform.position, PickUpRadius, _overlapColliders);
+        if (count > 1)
         {
-            foreach (var entity in entities)
+            for (int i = 0; i < count; i++)
             {
-                if (entity.TryGetComponent(out itemVisitor))
+                if (_overlapColliders[i].TryGetComponent(out IItemVisitor itemVisitor))
                 {
+                    Visit(itemVisitor);
                     _isReadyMove = false;
-                    return true;
                 }
             }
         }
-
-        itemVisitor = null;
-        return false;
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, PickUpRadius);
     }
-    
+
+    protected abstract void Visit(IItemVisitor itemVisitor);
+
 }

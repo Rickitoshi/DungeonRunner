@@ -11,7 +11,6 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     
     public void Visit(Coin coin, int cost)
     {
-        print(cost);
         coin.gameObject.SetActive(false);
     }
 
@@ -47,7 +46,6 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     private void ActivateMagnet()
     {
         _isMagnetActive = true;
-        print("Active");
         StartCoroutine(DeactivateMagnet());
     }
 
@@ -55,7 +53,6 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     {
         yield return new WaitForSeconds(MagnetDuration);
         _isMagnetActive = false;
-        print("Deactive");
     }
 
     private void OnDrawGizmos()
