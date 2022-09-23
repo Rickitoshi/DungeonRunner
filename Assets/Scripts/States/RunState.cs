@@ -3,14 +3,17 @@ using UnityEngine;
 public class RunState : IState
 {
     private readonly PlayerController _player;
+    private readonly Animator _animator;
 
-    public RunState(PlayerController player)
+    public RunState(PlayerController player, Animator animator)
     {
         _player = player;
+        _animator = animator;
     }
     
     public void Enter()
     {
+        _animator.SetTrigger(PlayerController.RUN);
     }
 
     public void Exit()

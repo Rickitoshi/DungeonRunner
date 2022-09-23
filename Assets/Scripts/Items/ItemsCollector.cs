@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class ItemsCollector : MonoBehaviour, IItemVisitor
 {
-    [SerializeField] private float MagnetDuration = 5;
-    [SerializeField] private float ItemMoveSpeed = 11;
-    [SerializeField] private Vector3 MagnetZone;
+    [SerializeField] private float magnetDuration = 5;
+    [SerializeField] private float itemMoveSpeed = 9;
+    [SerializeField] private Vector3 magnetZone;
 
     private bool _isMagnetActive;
     
@@ -30,14 +30,14 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
 
     private void SearchVisitor()
     {
-        Collider[] entities = Physics.OverlapBox(transform.position, MagnetZone);
+        Collider[] entities = Physics.OverlapBox(transform.position, magnetZone);
         if (entities.Length > 0)
         {
             foreach (var entity in entities)
             {
                 if (entity.TryGetComponent(out IItemCollectorVisitor visitor))
                 {
-                    visitor.Visit(this, ItemMoveSpeed);
+                    visitor.Visit(this, itemMoveSpeed);
                 }
             }
         }
@@ -51,12 +51,12 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
 
     private IEnumerator DeactivateMagnet()
     {
-        yield return new WaitForSeconds(MagnetDuration);
+        yield return new WaitForSeconds(magnetDuration);
         _isMagnetActive = false;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position, MagnetZone);
+        Gizmos.DrawWireCube(transform.position, magnetZone);
     }
 }
