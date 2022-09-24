@@ -56,6 +56,15 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+        
         _controller = GetComponent<CharacterController>();
         
         _stateManager = new StateManager();
@@ -65,15 +74,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        if (Instance)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-
         State = PlayerState.Idle;
     }
     
