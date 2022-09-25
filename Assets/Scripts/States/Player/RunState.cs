@@ -1,26 +1,23 @@
 using UnityEngine;
 
-public class RunState : IState
+public class RunState : PlayerState
 {
-    private readonly PlayerController _player;
-    private readonly Animator _animator;
-
-    public RunState(PlayerController player, Animator animator)
+    public RunState(PlayerController player, Animator animator) : base(player, animator)
     {
-        _player = player;
-        _animator = animator;
+        
     }
     
-    public void Enter()
+    public override void Enter()
     {
-        _animator.SetTrigger(PlayerController.RUN);
+        _animator.SetTrigger(_player.RUN);
     }
 
-    public void Exit()
+    public override void Exit()
     {
+        
     }
 
-    public void Update()
+    public override void Update()
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
@@ -36,7 +33,7 @@ public class RunState : IState
         }
     }
 
-    public void FixedUpdate()
+    public override void  FixedUpdate()
     {
         _player.MoveForward();
     }

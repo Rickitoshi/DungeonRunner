@@ -1,9 +1,10 @@
 namespace DefaultNamespace
 {
-    public enum PlayerState
+    public enum State
     {
         None,
         Run,
-        Idle
+        Idle,
+        Die
     }
 }

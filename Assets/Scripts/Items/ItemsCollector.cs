@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,11 +8,14 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     [SerializeField] private float itemMoveSpeed = 9;
     [SerializeField] private Vector3 magnetZone;
 
+    public event Action<int> OnPickUpCoin;
+
     private bool _isMagnetActive;
     
     public void Visit(Coin coin, int cost)
     {
         coin.gameObject.SetActive(false);
+        OnPickUpCoin?.Invoke(cost);
     }
 
     public void Visit(Magnet magnet)

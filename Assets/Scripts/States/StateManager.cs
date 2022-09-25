@@ -1,8 +1,8 @@
 public class StateManager
 {
-    public IState CurrentState { get; private set; }
+    public PlayerState CurrentState { get; private set; }
 
-    public void ChangeState(IState newState)
+    public void ChangeState(PlayerState newState)
     {
         CurrentState?.Exit();
         CurrentState = newState;

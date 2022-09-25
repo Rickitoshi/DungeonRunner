@@ -2,12 +2,13 @@ using System;
 using DefaultNamespace;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour,IObstacleVisitor
 {
     public static PlayerController Instance { get; private set; }
     
-    public static readonly int RUN = Animator.StringToHash("Run");
-    public static readonly int IDLE = Animator.StringToHash("Idle");
+    public readonly int RUN = Animator.StringToHash("Run");
+    public readonly int IDLE = Animator.StringToHash("Idle");
+    public readonly int DIE = Animator.StringToHash("Die");
     
     [Header("Move")]
     [SerializeField] private float moveSpeed = 6f ;
@@ -20,10 +21,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Reference")] 
     [SerializeField] private Animator animator;
-    
-    public bool IsGrounded{ get; private set; }
 
-    public PlayerState State
+    public event Action OnDie;
+    public bool IsGrounded{ get; private set; }
+    public ItemsCollector ItemsCollector { get; private set; }
+
+    public State State
     {
         get => _currentState;
         set
@@ -33,11 +36,14 @@ public class PlayerController : MonoBehaviour
             _currentState = value;
             switch (value)
             {
-                case PlayerState.Idle:
+                case State.Idle:
                     _stateManager.ChangeState(_idleState);
                     break;
-                case PlayerState.Run:
+                case State.Run:
                     _stateManager.ChangeState(_runState);
+                    break;
+                case State.Die:
+                    _stateManager.ChangeState(_failState);
                     break;
             }
         }
@@ -48,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private StrafeDirection _targetStrafe;
     private Vector3 _velocity;
     
-    private PlayerState _currentState;
+    private State _currentState;
     private StateManager _stateManager;
     private RunState _runState;
     private IdleState _idleState;
@@ -66,15 +72,17 @@ public class PlayerController : MonoBehaviour
         }
         
         _controller = GetComponent<CharacterController>();
+        ItemsCollector = GetComponent<ItemsCollector>();
         
         _stateManager = new StateManager();
         _runState = new RunState(this, animator);
         _idleState = new IdleState(this, animator);
+        _failState = new FailState(this, animator);
     }
 
     private void Start()
     {
-        State = PlayerState.Idle;
+        State = State.Idle;
     }
     
     private void Update()
@@ -149,5 +157,10 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         _velocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
+    }
+
+    public void Visit()
+    {
+        OnDie?.Invoke();
     }
 }
