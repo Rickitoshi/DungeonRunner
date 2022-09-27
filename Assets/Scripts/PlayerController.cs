@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using DefaultNamespace;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour,IObstacleVisitor
@@ -50,10 +52,10 @@ public class PlayerController : MonoBehaviour,IObstacleVisitor
     }
 
     private CharacterController _controller;
-    private float _targetSidePosition;
-    private StrafeDirection _targetStrafe;
+    private float _targetPositionX;
+    private StrafeDirection _strafeDirection;
     private Vector3 _velocity;
-    
+
     private State _currentState;
     private StateManager _stateManager;
     private RunState _runState;
@@ -95,31 +97,39 @@ public class PlayerController : MonoBehaviour,IObstacleVisitor
     {
         _stateManager.CurrentState.FixedUpdate();
         Gravity();
-        
-        if (IsReadyToStrafe())
-        {
-            Strafe();
-        }
     }
 
-    private bool IsReadyToStrafe()
+    public bool IsReadyToStrafe()
     {
-        return Math.Abs(transform.position.x - _targetSidePosition) > 0.04;
+        return Math.Abs(transform.position.x - _targetPositionX) > 0.04f;
     }
     
-    private void Strafe()
+    public void Strafe()
     {
-        if (_targetStrafe == StrafeDirection.Left)
+        if (_strafeDirection == StrafeDirection.Left)
         {
             _controller.Move(Vector3.left * (strafeSpeed * Time.deltaTime));
         }
-
-        if (_targetStrafe == StrafeDirection.Right)
+        else
         {
             _controller.Move(Vector3.right * (strafeSpeed * Time.deltaTime));
         }
     }
-
+    
+    public void SwitchSide(StrafeDirection strafeDirection)
+    {
+        switch (strafeDirection)
+        {
+            case StrafeDirection.Left when _targetPositionX > -strafeDistance:
+                _targetPositionX -= strafeDistance;
+                break;
+            case StrafeDirection.Right when _targetPositionX < strafeDistance:
+                _targetPositionX += strafeDistance;
+                break;
+        }
+        _strafeDirection = strafeDirection;
+    }
+    
     private void CheckGround()
     {
         IsGrounded = _controller.isGrounded;
@@ -134,21 +144,7 @@ public class PlayerController : MonoBehaviour,IObstacleVisitor
         _velocity.y += gravityValue * Time.deltaTime;
         _controller.Move(_velocity * Time.deltaTime);
     }
-    
-    public void SwitchSide(StrafeDirection strafeDirection)
-    {
-        if (strafeDirection == StrafeDirection.Left && _targetSidePosition > -strafeDistance)
-        {
-            _targetSidePosition -= strafeDistance;
-            _targetStrafe = StrafeDirection.Left;
-        }
-        if (strafeDirection == StrafeDirection.Right && _targetSidePosition < strafeDistance)
-        {
-            _targetSidePosition += strafeDistance;
-            _targetStrafe = StrafeDirection.Right;
-        }
-    }
-    
+
     public void MoveForward()
     {
         _controller.Move(Vector3.forward * (moveSpeed  * Time.deltaTime));

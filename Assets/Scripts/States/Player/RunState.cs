@@ -36,5 +36,10 @@ public class RunState : PlayerState
     public override void  FixedUpdate()
     {
         _player.MoveForward();
+
+        if (_player.IsReadyToStrafe())
+        {
+            _player.Strafe();
+        }
     }
 }
