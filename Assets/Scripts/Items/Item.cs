@@ -49,6 +49,15 @@ public abstract class Item : MonoBehaviour, IItemCollectorVisitor
         Gizmos.DrawWireSphere(transform.position, PickUpRadius);
     }
 
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+    }
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
+    }
+    
     protected abstract void Visit(IItemVisitor itemVisitor);
 
 }

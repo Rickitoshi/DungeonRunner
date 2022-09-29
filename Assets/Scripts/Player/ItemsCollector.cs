@@ -14,14 +14,14 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     
     public void Visit(Coin coin, int cost)
     {
-        coin.gameObject.SetActive(false);
+        coin.Deactivate();
         OnPickUpCoin?.Invoke(cost);
     }
 
     public void Visit(Magnet magnet)
     {
         ActivateMagnet();
-        magnet.gameObject.SetActive(false);
+        magnet.Deactivate();
     }
 
     private void FixedUpdate()

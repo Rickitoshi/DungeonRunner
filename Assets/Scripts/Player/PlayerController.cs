@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using DefaultNamespace;
 using DG.Tweening;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour,IObstacleVisitor
+public class PlayerController : MonoBehaviour, IObstacleVisitor
 {
     public static PlayerController Instance { get; private set; }
     
@@ -17,7 +16,7 @@ public class PlayerController : MonoBehaviour,IObstacleVisitor
     [SerializeField] private float strafeSpeed = 4f ;
     [SerializeField] private float strafeDistance = 1.5f ;
 
-    [Header("Jump")] 
+    [Header("Jump")]
     [SerializeField] private float jumpHeight = 1.3f;
     [SerializeField] private float gravityValue = -9.81f;
 
@@ -101,7 +100,7 @@ public class PlayerController : MonoBehaviour,IObstacleVisitor
 
     public bool IsReadyToStrafe()
     {
-        return Math.Abs(transform.position.x - _targetPositionX) > 0.04f;
+        return Math.Abs(transform.position.x - _targetPositionX) > 0.03f;
     }
     
     public void Strafe()
@@ -159,4 +158,19 @@ public class PlayerController : MonoBehaviour,IObstacleVisitor
     {
         OnDie?.Invoke();
     }
+}
+
+public enum State
+{
+    None,
+    Run,
+    Idle,
+    Die
+}
+
+public enum StrafeDirection
+{
+    None,
+    Left,
+    Right
 }
