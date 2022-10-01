@@ -19,17 +19,22 @@ public class RunState : PlayerState
 
     public override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
+        if (_player.IsGrounded)
         {
-            _player.SwitchSide(StrafeDirection.Right);
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            _player.SwitchSide(StrafeDirection.Left);
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && _player.IsGrounded)
-        {
-            _player.Jump();
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                _player.SwitchSide(StrafeDirection.Right);
+            }
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                _player.SwitchSide(StrafeDirection.Left);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _player.Jump();
+            }
         }
     }
 
