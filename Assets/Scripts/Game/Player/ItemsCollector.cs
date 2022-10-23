@@ -1,6 +1,7 @@
-using System;
 using System.Collections;
+using Signals;
 using UnityEngine;
+using Zenject;
 
 public class ItemsCollector : MonoBehaviour, IItemVisitor
 {
@@ -8,22 +9,16 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     [SerializeField] private float itemMoveSpeed = 9;
     [SerializeField] private Vector3 magnetZone;
 
-    public event Action<int> OnPickUpCoin;
-
+    private SignalBus _signalBus;
     private bool _isMagnetActive;
     
-    public void Visit(Coin coin, int cost)
+    [Inject]
+    private void Construct(SignalBus signalBus)
     {
-        coin.Deactivate();
-        OnPickUpCoin?.Invoke(cost);
+        _signalBus = signalBus;
     }
-
-    public void Visit(Magnet magnet)
-    {
-        ActivateMagnet();
-        magnet.Deactivate();
-    }
-
+    
+    
     private void FixedUpdate()
     {
         if (_isMagnetActive)
@@ -47,6 +42,18 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
         }
     }
 
+    public void Visit(Coin coin, int cost)
+    {
+        coin.Deactivate();
+        _signalBus.Fire(new OnCoinsAddSignal(cost));
+    }
+
+    public void Visit(Magnet magnet)
+    {
+        ActivateMagnet();
+        magnet.Deactivate();
+    }
+    
     private void ActivateMagnet()
     {
         _isMagnetActive = true;

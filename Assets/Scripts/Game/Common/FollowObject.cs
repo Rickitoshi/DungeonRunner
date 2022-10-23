@@ -6,12 +6,7 @@ public class FollowObject : MonoBehaviour
     [SerializeField] private bool ignoreX;
     [SerializeField] private bool ignoreY;
     [SerializeField] private bool ignoreZ;
-    
-    void Start()
-    {
-        
-    }
-    
+
     void Update()
     {
         Vector3 targetPosition = new Vector3(ignoreX ? 0 : target.position.x, ignoreY ? 0 : target.position.y,

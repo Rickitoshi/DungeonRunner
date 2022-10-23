@@ -8,7 +8,6 @@ public class SaveSystem : IInitializable
     
     public SaveData Data { get; private set; }
 
-
     public void Initialize()
     {
         if (PlayerPrefs.HasKey(SAVE_KEY))

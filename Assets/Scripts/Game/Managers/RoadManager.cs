@@ -4,10 +4,8 @@ using Random = UnityEngine.Random;
 
 public class RoadManager : MonoBehaviour
 {
-    [SerializeField] private GameObject lobby;
-    [SerializeField] private RoadPart firstPart;
-    [SerializeField] private RoadPart[] roadParts;
-    [SerializeField] private int numberOfActiveRoad = 4;
+    [SerializeField] private RoadPart[] roadPartsPool;
+    [SerializeField] private int startParts = 2;
     [SerializeField] private float roadPartLenght;
 
     private Queue<RoadPart> _currentRoad;
@@ -18,8 +16,8 @@ public class RoadManager : MonoBehaviour
 
     private void Awake()
     {
-        _instantiatedRoadParts = new List<RoadPart>(roadParts.Length);
-        _currentRoad = new Queue<RoadPart>(numberOfActiveRoad);
+        _instantiatedRoadParts = new List<RoadPart>(roadPartsPool.Length);
+        _currentRoad = new Queue<RoadPart>();
         SetDefaultPosition();
     }
 
@@ -37,8 +35,15 @@ public class RoadManager : MonoBehaviour
     {
         InstantiateRoadPool();
         Subscribe();
-        GetPart();
-        GetPart();
+        InitializeRoad();
+    }
+
+    private void InitializeRoad()
+    {
+        for (int i = 0; i < startParts; i++)
+        {
+            GetPart();
+        }
     }
 
     private void SetDefaultPosition()
@@ -79,7 +84,7 @@ public class RoadManager : MonoBehaviour
     
     private void InstantiateRoadPool()
     {
-        foreach (var part in roadParts)
+        foreach (var part in roadPartsPool)
         {
             _partObject = Instantiate(part, transform);
             _partObject.gameObject.SetActive(false);
@@ -102,12 +107,7 @@ public class RoadManager : MonoBehaviour
             part.OnPlayerExit -= RebuildRoad;
         }
     }
-    
-    public void RemoveLobby()
-    {
-        lobby.SetActive(false);
-    }
-    
+
     public void Restart()
     {
         for (int i = 0; i < _currentRoad.Count; i++)
@@ -116,8 +116,6 @@ public class RoadManager : MonoBehaviour
         }
 
         SetDefaultPosition();
-        lobby.SetActive(true);
-        GetPart();
-        GetPart();
+        InitializeRoad();
     }
 }

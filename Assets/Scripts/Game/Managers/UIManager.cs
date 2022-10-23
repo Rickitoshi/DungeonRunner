@@ -1,123 +1,89 @@
 using System;
-using UnityEngine;
+using Signals;
+using Zenject;
 
-public class UIManager : MonoBehaviour
+public class UIManager: IInitializable, IDisposable
 {
-    [SerializeField] private GamePanel gamePanel;
-    [SerializeField] private PausePanel pausePanel;
-    [SerializeField] private LosePanel losePanel;
-    [SerializeField] private BasePanel menuPanel;
+    [Inject] private GamePanel _gamePanel;
+    [Inject] private PausePanel _pausePanel;
+    [Inject] private LosePanel _losePanel;
+    [Inject] private MenuPanel _menuPanel;
+    [Inject] private SignalBus _signalBus;
+    [Inject] private SaveSystem _saveSystem;
 
-    public event Action OnPause;
-    public event Action OnResume;
-    public event Action OnMenu;
-    
-    public GameScreen GameScreen
-    {
-        get => _currentScreen;
-        set
-        {
-            if (value == _currentScreen) 
-                return;
-
-            switch (value)
-            {
-                case GameScreen.Game:
-                    ChangePanel(gamePanel);
-                    break;
-                case GameScreen.Lose:
-                    ChangePanel(losePanel);
-                    break;
-                case GameScreen.Menu:
-                    ChangePanel(menuPanel);
-                    break;
-                case GameScreen.Pause:
-                    ChangePanel(pausePanel);
-                    break;
-                
-            }
-        }
-    }
-    
-    private GameScreen _currentScreen;
     private BasePanel _currentPanel;
 
-    private void Awake()
+    public void Initialize()
     {
-        _currentPanel = menuPanel;
-    }
+        _gamePanel.CoinCounter.Initialize(_saveSystem.Data.Coins);
+        
+        _gamePanel.Deactivate();
+        _pausePanel.Deactivate();
+        _losePanel.Deactivate();
+        _menuPanel.Deactivate();
 
-    private void Start()
-    {
+        ChangePanel(_menuPanel);
         Subscribe();
     }
 
-    private void OnDestroy()
+    public void Dispose()
     {
         Unsubscribe();
     }
 
     private void Subscribe()
     {
-        pausePanel.OnMenuClick += OnMenuClick;
-        pausePanel.OnResumeClick += OnResumeClick;
-        gamePanel.OnPauseClick += OnPauseClick;
-        losePanel.OnMenuClick += OnMenuClick;
+        _signalBus.Subscribe<MenuSignal>(OnMenu);
+        _signalBus.Subscribe<PauseSignal>(OnPause);
+        _signalBus.Subscribe<ResumeSignal>(OnGame);
+        _signalBus.Subscribe<OnLoseSignal>(OnLose);
+        _signalBus.Subscribe<StartGameSignal>(OnGame);
+        _signalBus.Subscribe<OnCoinsAddSignal>(AddCoins);
     }
-    
+
     private void Unsubscribe()
     {
-        pausePanel.OnMenuClick -= OnMenuClick;
-        pausePanel.OnResumeClick -= OnResumeClick;
-        gamePanel.OnPauseClick -= OnPauseClick;
-        losePanel.OnMenuClick -= OnMenuClick;
+        _signalBus.Unsubscribe<MenuSignal>(OnMenu);
+        _signalBus.Unsubscribe<PauseSignal>(OnPause);
+        _signalBus.Unsubscribe<ResumeSignal>(OnGame);
+        _signalBus.Unsubscribe<OnLoseSignal>(OnLose);
+        _signalBus.Unsubscribe<StartGameSignal>(OnGame);
+        _signalBus.Unsubscribe<OnCoinsAddSignal>(AddCoins);
     }
 
-    private void OnMenuClick()
+    private void OnMenu()
     {
-        GameScreen = GameScreen.Menu;
-        OnMenu?.Invoke();
+        ChangePanel(_menuPanel);
     }
 
-    private void OnResumeClick()
+    private void OnGame()
     {
-        GameScreen = GameScreen.Game;
-        OnResume?.Invoke();
+        ChangePanel(_gamePanel);
     }
 
-    private void OnPauseClick()
+    private void OnPause()
     {
-        GameScreen = GameScreen.Pause;
-        OnPause?.Invoke();
+        ChangePanel(_pausePanel);
     }
-    
+
+    private void OnLose()
+    {
+        ChangePanel(_losePanel);
+    }
+
+    private void AddCoins(OnCoinsAddSignal signal)
+    {
+        _gamePanel.CoinCounter.AddCoins(signal.Value);
+    }
+
     private void ChangePanel(BasePanel panel)
     {
-        _currentPanel.Deactivate();
+        if (_currentPanel != null)
+        {
+            _currentPanel.Deactivate();
+        }
+
         _currentPanel = panel;
         _currentPanel.Activate();
     }
-
-    public void Initialize()
-    {
-        gamePanel.Deactivate();
-        pausePanel.Deactivate();
-        losePanel.Deactivate();
-        menuPanel.Deactivate();
-    }
-
-    public void AddCoins(int value)
-    {
-        gamePanel.CoinCounter.AddCoins(value);
-    }
-    
-}
-
-public enum GameScreen
-{
-    None,
-    Game,
-    Lose,
-    Menu,
-    Pause
 }

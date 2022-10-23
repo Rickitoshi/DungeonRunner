@@ -1,34 +1,35 @@
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using Zenject;
 
 public class CoinCounter : MonoBehaviour
 {
     [SerializeField] private float duration = 1f;
+    [SerializeField] private TextMeshProUGUI textMesh;
     
-    public int Coins { get; private set; }
-    
-    private TextMeshProUGUI _textMesh;
-    
-    void Awake()
+    private int _coins;
+    private SignalBus _signalBus;
+
+    private void Awake()
     {
-        _textMesh = GetComponentInChildren<TextMeshProUGUI>();
+        textMesh = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public void Initialize(int coins)
     {
-        Coins = coins;
-        _textMesh.text = Coins.ToString();
+        _coins = coins;
+        textMesh.text = _coins.ToString();
     }
 
     public void AddCoins(int cost)
     {
-        DOTween.To(value => { _textMesh.text = ((int)value).ToString(); }, Coins, Coins += cost, duration);
+        DOTween.To(value => { textMesh.text = ((int)value).ToString(); }, _coins, _coins += cost, duration);
     }
 
     public void RemoveCoins(int cost)
     {
-        DOTween.To(value => { _textMesh.text = ((int)value).ToString(); }, Coins, Coins -= cost, duration);
+        DOTween.To(value => { textMesh.text = ((int)value).ToString(); }, _coins, _coins -= cost, duration);
     }
 
 }

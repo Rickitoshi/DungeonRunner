@@ -1,87 +1,81 @@
+using System;
+using Signals;
 using UnityEngine;
+using Zenject;
 
-public class GameManager : MonoBehaviour
+public class GameManager: IInitializable, IDisposable
 {
-    [SerializeField] private GameObject lobbyCamera;
-    [SerializeField] private UIManager UIManager;
-    [SerializeField] private RoadManager roadManager;
+    [Inject] private RoadManager _roadManager;
+    [Inject] private CameraManager _cameraManager;
+    [Inject] private SignalBus _signalBus;
+    [Inject] private SaveSystem _saveSystem;
+    [Inject] private PlayerController _player;
 
     private int _coins;
 
-    private void Start()
+    public void Initialize()
     {
+        _coins = _saveSystem.Data.Coins;
         Subscribe();
-        UIManager.Initialize();
-        UIManager.GameScreen = GameScreen.Menu;
     }
 
-    void Update()
+    public void Dispose()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            PlayerController.Instance.State = State.Run;
-            lobbyCamera.SetActive(false);
-            UIManager.GameScreen = GameScreen.Game;
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            PlayerController.Instance.State = State.Idle;
-            lobbyCamera.SetActive(true);
-        }
-    }
-
-    private void OnDestroy()
-    {
+        _saveSystem.SaveData();
         Unsubscribe();
     }
 
     private void Subscribe()
     {
-        PlayerController.Instance.ItemsCollector.OnPickUpCoin += AddCoins;
-        PlayerController.Instance.OnDie += PlayerDie;
-        UIManager.OnPause += Pause;
-        UIManager.OnResume += Resume;
-        UIManager.OnMenu += Restart;
+        _signalBus.Subscribe<OnLoseSignal>(Lose);
+        _signalBus.Subscribe<OnCoinsAddSignal>(AddCoins);
+        _signalBus.Subscribe<MenuSignal>(Restart);
+        _signalBus.Subscribe<PauseSignal>(Pause);
+        _signalBus.Subscribe<ResumeSignal>(Resume);
+        _signalBus.Subscribe<ExitGameSignal>(Exit);
     }
     
     private void Unsubscribe()
     {
-        PlayerController.Instance.ItemsCollector.OnPickUpCoin -= AddCoins;
-        PlayerController.Instance.OnDie -= PlayerDie;
-        UIManager.OnPause -= Pause;
-        UIManager.OnResume -= Resume;
-        UIManager.OnMenu -= Restart;
+        _signalBus.Unsubscribe<OnLoseSignal>(Lose);
+        _signalBus.Unsubscribe<OnCoinsAddSignal>(AddCoins);
+        _signalBus.Unsubscribe<MenuSignal>(Restart);
+        _signalBus.Unsubscribe<PauseSignal>(Pause);
+        _signalBus.Unsubscribe<ResumeSignal>(Resume);
+        _signalBus.Unsubscribe<ExitGameSignal>(Exit);
     }
 
     private void Pause()
     {
-        PlayerController.Instance.State = State.Idle;
+        _player.State = State.Idle;
     }
 
     private void Resume()
     {
-        PlayerController.Instance.State = State.Run;
+        _cameraManager.SetLobbyCamera(false);
+        _player.State = State.Run;
     }
 
     private void Restart()
     {
-        lobbyCamera.SetActive(true);
-        PlayerController.Instance.SetDefault();
-        roadManager.Restart();
+        _cameraManager.SetLobbyCamera(true);
+        _player.SetDefault();
+        _roadManager.Restart();
     }
     
-    private void PlayerDie()
+    private void Lose()
     {
-        PlayerController.Instance.State = State.Die;
-        UIManager.GameScreen = GameScreen.Lose;
+        _player.State = State.Die;
     }
-    
-    private void AddCoins(int cost)
+
+    private void Exit()
     {
-        if (cost > 0)
-        {
-            _coins += cost;
-            UIManager.AddCoins(cost);
-        }
+        Application.Quit();
+    }
+
+    private void AddCoins(OnCoinsAddSignal signal)
+    {
+        _coins += signal.Value;
+        _saveSystem.Data.Coins = _coins;
     }
 }

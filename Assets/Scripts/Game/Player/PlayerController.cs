@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
-using DG.Tweening;
+using Signals;
 using UnityEngine;
+using Zenject;
 
 public class PlayerController : MonoBehaviour, IObstacleVisitor
 {
-    public static PlayerController Instance { get; private set; }
-    
     public readonly int RUN = Animator.StringToHash("Run");
     public readonly int IDLE = Animator.StringToHash("Idle");
     public readonly int DIE = Animator.StringToHash("Die");
@@ -22,8 +20,7 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
 
     [Header("Reference")] 
     [SerializeField] private Animator animator;
-
-    public event Action OnDie;
+    
     public bool IsGrounded{ get; private set; }
     public ItemsCollector ItemsCollector { get; private set; }
 
@@ -50,6 +47,9 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
         }
     }
 
+    private SignalBus _signalBus;
+    private InputHandler _inputHandler;
+    
     private Vector3 _startPosition;
     private CharacterController _controller;
     private float _targetPositionX;
@@ -62,22 +62,20 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     private IdleState _idleState;
     private FailState _failState;
 
+    [Inject]
+    private void Construct(SignalBus signalBus,InputHandler inputHandler)
+    {
+        _signalBus = signalBus;
+        _inputHandler = inputHandler;
+    }
+    
     private void Awake()
     {
-        if (Instance)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-        
         _controller = GetComponent<CharacterController>();
         ItemsCollector = GetComponent<ItemsCollector>();
         
         _stateManager = new StateManager();
-        _runState = new RunState(this, animator);
+        _runState = new RunState(this, animator, _inputHandler);
         _idleState = new IdleState(this, animator);
         _failState = new FailState(this, animator);
     }
@@ -168,7 +166,7 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     {
         if (_currentState == State.Run)
         {
-            OnDie?.Invoke(); 
+            _signalBus.Fire<OnLoseSignal>();
         }
     }
 

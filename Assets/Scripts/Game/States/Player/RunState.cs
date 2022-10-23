@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class RunState : PlayerState
 {
-    public RunState(PlayerController player, Animator animator) : base(player, animator)
+    private InputHandler _inputHandler;
+    
+    public RunState(PlayerController player, Animator animator, InputHandler inputHandler) : base(player, animator)
     {
-        
+        _inputHandler = inputHandler;
     }
     
     public override void Enter()
@@ -19,6 +21,8 @@ public class RunState : PlayerState
 
     public override void Update()
     {
+#if UNITY_EDITOR
+        
         if (Input.GetKeyDown(KeyCode.D))
         {
             _player.SwitchSide(StrafeDirection.Right);
@@ -33,6 +37,25 @@ public class RunState : PlayerState
         {
             _player.Jump();
         }
+        
+#elif UNITY_ANDROID
+
+        if (_inputHandler.HorizontalAxis>5)
+        {
+            _player.SwitchSide(StrafeDirection.Right);
+        }
+
+        if (_inputHandler.HorizontalAxis<-5)
+        {
+            _player.SwitchSide(StrafeDirection.Left);
+        }
+
+        if (_inputHandler.VerticalAxis>20 && _player.IsGrounded)
+        {
+            _player.Jump();
+        }
+
+#endif
     }
 
     public override void  FixedUpdate()
