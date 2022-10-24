@@ -40,17 +40,17 @@ public class RunState : PlayerState
         
 #elif UNITY_ANDROID
 
-        if (_inputHandler.HorizontalAxis>5)
+        if (_inputHandler.RightSwipe)
         {
             _player.SwitchSide(StrafeDirection.Right);
         }
 
-        if (_inputHandler.HorizontalAxis<-5)
+        if (_inputHandler.LeftSwipe)
         {
             _player.SwitchSide(StrafeDirection.Left);
         }
 
-        if (_inputHandler.VerticalAxis>20 && _player.IsGrounded)
+        if (_inputHandler.UpSwipe && _player.IsGrounded)
         {
             _player.Jump();
         }

@@ -173,6 +173,7 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     public void SetDefault()
     {
         _controller.Move(_startPosition - transform.position);
+        _targetPositionX = 0;
         State = State.Idle;
     }
 }

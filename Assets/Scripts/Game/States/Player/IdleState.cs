@@ -19,7 +19,7 @@ public class IdleState: PlayerState
 
     public override void Update()
     {
-        
+     
     }
 
     public override void FixedUpdate()

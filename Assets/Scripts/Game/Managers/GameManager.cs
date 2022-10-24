@@ -18,11 +18,17 @@ public class GameManager: IInitializable, IDisposable
         _coins = _saveSystem.Data.Coins;
         Subscribe();
     }
-
+    
     public void Dispose()
+    {
+        Exit();
+    }
+
+    private void Exit()
     {
         _saveSystem.SaveData();
         Unsubscribe();
+        Application.Quit();
     }
 
     private void Subscribe()
@@ -66,11 +72,6 @@ public class GameManager: IInitializable, IDisposable
     private void Lose()
     {
         _player.State = State.Die;
-    }
-
-    private void Exit()
-    {
-        Application.Quit();
     }
 
     private void AddCoins(OnCoinsAddSignal signal)
