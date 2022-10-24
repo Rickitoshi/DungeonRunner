@@ -7,14 +7,4 @@ public class GamePanel : BasePanel
     [SerializeField] private CoinCounter coinCounter;
 
     public CoinCounter CoinCounter => coinCounter;
-    
-    protected override void Subscribe()
-    {
-        
-    }
-
-    protected override void Unsubscribe()
-    {
-        
-    }
 }

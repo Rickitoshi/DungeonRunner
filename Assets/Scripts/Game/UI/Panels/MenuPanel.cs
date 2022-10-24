@@ -4,14 +4,5 @@ using UnityEngine;
 
 public class MenuPanel : BasePanel
 {
-    protected override void Subscribe()
-    {
-        
-    }
-
-    protected override void Unsubscribe()
-    {
-       
-    }
 }
 
