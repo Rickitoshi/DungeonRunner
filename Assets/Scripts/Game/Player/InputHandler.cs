@@ -3,8 +3,6 @@ using Zenject;
 
 public class InputHandler: ITickable
 {
-    private const int DEAD_ZONE = 10;
-    
     public bool LeftSwipe { get; private set; }
     public bool RightSwipe { get; private set; }
     public bool UpSwipe { get; private set; }
@@ -17,21 +15,21 @@ public class InputHandler: ITickable
         if (Input.touchCount > 0)
         {
             var touch = Input.GetTouch(0);
+            Vector2 delta = touch.deltaPosition;
             
-            if (touch.phase==TouchPhase.Moved && !_isSwiped)
+            if (delta != Vector2.zero && !_isSwiped)
             {
-                Vector2 delta = touch.deltaPosition;
                 _isSwiped = true;
                 
                 if(Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
                 {
-                    RightSwipe = delta.x > DEAD_ZONE;
-                    LeftSwipe = delta.x < -DEAD_ZONE;
+                    RightSwipe = delta.x > 0;
+                    LeftSwipe = delta.x < 0;
                 }
                 else
                 {
-                    UpSwipe = delta.y > DEAD_ZONE;
-                    DownSwipe = delta.y < -DEAD_ZONE;
+                    UpSwipe = delta.y > 0;
+                    DownSwipe = delta.y < 0;
                 }
             }
             else
