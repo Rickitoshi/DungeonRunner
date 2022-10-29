@@ -4,14 +4,14 @@ public class RunState : PlayerState
 {
     private InputHandler _inputHandler;
     
-    public RunState(PlayerController player, Animator animator, InputHandler inputHandler) : base(player, animator)
+    public RunState(PlayerController player, PlayerAnimatorController animator, InputHandler inputHandler) : base(player, animator)
     {
         _inputHandler = inputHandler;
     }
     
     public override void Enter()
     {
-        _animator.SetTrigger(_player.RUN);
+        _animator.SetRun();
     }
 
     public override void Exit()

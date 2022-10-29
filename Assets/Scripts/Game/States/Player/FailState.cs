@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class FailState: PlayerState
 {
-    public FailState(PlayerController player, Animator animator) : base(player, animator)
+    public FailState(PlayerController player, PlayerAnimatorController animator) : base(player, animator)
     {
     }
 
     public override void Enter()
     {
-        _animator.SetTrigger(_player.DIE);
+        _animator.SetDie();
     }
 
     public override void Exit()

@@ -3,7 +3,7 @@ using Signals;
 using UnityEngine;
 using Zenject;
 
-public class GameManager: IInitializable, IDisposable
+public class GameManager: IInitializable,IDisposable
 {
     [Inject] private RoadManager _roadManager;
     [Inject] private CameraManager _cameraManager;
@@ -18,16 +18,21 @@ public class GameManager: IInitializable, IDisposable
         _coins = _saveSystem.Data.Coins;
         Subscribe();
     }
-    
+
     public void Dispose()
     {
-        Exit();
+        _saveSystem.SaveData();
+        Unsubscribe();
     }
 
     private void Exit()
     {
-        _saveSystem.SaveData();
-        Unsubscribe();
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            _saveSystem.SaveData();
+            Unsubscribe();
+        }
+
         Application.Quit();
     }
 
@@ -37,7 +42,7 @@ public class GameManager: IInitializable, IDisposable
         _signalBus.Subscribe<OnCoinsAddSignal>(AddCoins);
         _signalBus.Subscribe<MenuSignal>(Restart);
         _signalBus.Subscribe<PauseSignal>(Pause);
-        _signalBus.Subscribe<ResumeSignal>(Resume);
+        _signalBus.Subscribe<PlaySignal>(Play);
         _signalBus.Subscribe<ExitGameSignal>(Exit);
     }
     
@@ -47,7 +52,7 @@ public class GameManager: IInitializable, IDisposable
         _signalBus.Unsubscribe<OnCoinsAddSignal>(AddCoins);
         _signalBus.Unsubscribe<MenuSignal>(Restart);
         _signalBus.Unsubscribe<PauseSignal>(Pause);
-        _signalBus.Unsubscribe<ResumeSignal>(Resume);
+        _signalBus.Unsubscribe<PlaySignal>(Play);
         _signalBus.Unsubscribe<ExitGameSignal>(Exit);
     }
 
@@ -56,7 +61,7 @@ public class GameManager: IInitializable, IDisposable
         _player.State = State.Idle;
     }
 
-    private void Resume()
+    private void Play()
     {
         _cameraManager.SetLobbyCamera(false);
         _player.State = State.Run;
@@ -76,6 +81,8 @@ public class GameManager: IInitializable, IDisposable
 
     private void AddCoins(OnCoinsAddSignal signal)
     {
+        if (signal.Value < 0) return;
+        
         _coins += signal.Value;
         _saveSystem.Data.Coins = _coins;
     }

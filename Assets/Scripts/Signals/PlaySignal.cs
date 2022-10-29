@@ -1,6 +1,6 @@
 namespace Signals
 {
-    public class ResumeSignal
+    public class PlaySignal
     {
         
     }

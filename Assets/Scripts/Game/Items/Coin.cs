@@ -6,6 +6,6 @@ public class Coin : Item
     
     protected override void Visit(IItemVisitor itemVisitor)
     {
-        itemVisitor.Visit(this,Cost);
+        itemVisitor.ItemVisit(this,Cost);
     }
 }

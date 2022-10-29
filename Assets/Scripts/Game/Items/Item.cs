@@ -7,7 +7,7 @@ public abstract class Item : MonoBehaviour, IItemCollectorVisitor
     private ItemsCollector _target;
     private float _moveSpeed;
     
-    public void Visit(ItemsCollector collector,float moveSpeed)
+    public void CollectorVisit(ItemsCollector collector,float moveSpeed)
     {
         if (!_isReadyMove)
         {

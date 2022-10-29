@@ -10,7 +10,7 @@ public class GameSceneInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<SaveSystem>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<UIManager>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<GameManager>().AsSingle().NonLazy();
-        
+
         BindSignals();
     }
 
@@ -20,7 +20,7 @@ public class GameSceneInstaller : MonoInstaller
         Container.DeclareSignal<OnCoinsAddSignal>();
         Container.DeclareSignal<OnLoseSignal>();
         Container.DeclareSignal<PauseSignal>();
-        Container.DeclareSignal<ResumeSignal>();
+        Container.DeclareSignal<PlaySignal>();
         Container.DeclareSignal<MenuSignal>();
         Container.DeclareSignal<ExitGameSignal>();
     }

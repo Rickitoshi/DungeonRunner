@@ -5,10 +5,6 @@ using Zenject;
 
 public class PlayerController : MonoBehaviour, IObstacleVisitor
 {
-    public readonly int RUN = Animator.StringToHash("Run");
-    public readonly int IDLE = Animator.StringToHash("Idle");
-    public readonly int DIE = Animator.StringToHash("Die");
-    
     [Header("Move")]
     [SerializeField] private float moveSpeed = 6f ;
     [SerializeField] private float strafeSpeed = 4f ;
@@ -18,11 +14,7 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     [SerializeField] private float jumpHeight = 1.3f;
     [SerializeField] private float gravityValue = -9.81f;
 
-    [Header("Reference")] 
-    [SerializeField] private Animator animator;
-    
     public bool IsGrounded{ get; private set; }
-    public ItemsCollector ItemsCollector { get; private set; }
 
     public State State
     {
@@ -49,15 +41,16 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
 
     private SignalBus _signalBus;
     private InputHandler _inputHandler;
+    private CharacterController _controller;
+    private StateManager _stateManager;
+    private PlayerAnimatorController _animator;
     
     private Vector3 _startPosition;
-    private CharacterController _controller;
     private float _targetPositionX;
     private StrafeDirection _strafeDirection;
     private Vector3 _velocity;
 
     private State _currentState;
-    private StateManager _stateManager;
     private RunState _runState;
     private IdleState _idleState;
     private FailState _failState;
@@ -72,12 +65,12 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
-        ItemsCollector = GetComponent<ItemsCollector>();
-        
+        _animator = GetComponent<PlayerAnimatorController>();
+
         _stateManager = new StateManager();
-        _runState = new RunState(this, animator, _inputHandler);
-        _idleState = new IdleState(this, animator);
-        _failState = new FailState(this, animator);
+        _runState = new RunState(this, _animator, _inputHandler);
+        _idleState = new IdleState(this, _animator);
+        _failState = new FailState(this, _animator);
     }
 
     private void Start()
@@ -162,7 +155,7 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
         _velocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
     }
 
-    public void Visit()
+    public void ObstacleVisit()
     {
         if (_currentState == State.Run)
         {

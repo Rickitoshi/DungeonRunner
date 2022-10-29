@@ -36,19 +36,19 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
             {
                 if (entity.TryGetComponent(out IItemCollectorVisitor visitor))
                 {
-                    visitor.Visit(this, itemMoveSpeed);
+                    visitor.CollectorVisit(this, itemMoveSpeed);
                 }
             }
         }
     }
 
-    public void Visit(Coin coin, int cost)
+    public void ItemVisit(Coin coin, int cost)
     {
         coin.Deactivate();
         _signalBus.Fire(new OnCoinsAddSignal(cost));
     }
 
-    public void Visit(Magnet magnet)
+    public void ItemVisit(Magnet magnet)
     {
         ActivateMagnet();
         magnet.Deactivate();

@@ -1,4 +1,4 @@
 public interface IItemCollectorVisitor
 {
-    public void Visit(ItemsCollector collector, float moveSpeed);
+    public void CollectorVisit(ItemsCollector collector, float moveSpeed);
 }

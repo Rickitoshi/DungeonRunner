@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class IdleState: PlayerState
 {
-    public IdleState(PlayerController player, Animator animator) : base(player, animator)
+    public IdleState(PlayerController player, PlayerAnimatorController animator) : base(player, animator)
     {
         
     }
     
     public override void Enter()
     {
-        _animator.SetTrigger(_player.IDLE);
+        _animator.SetIdle();
     }
 
     public override void Exit()

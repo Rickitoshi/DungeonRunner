@@ -16,6 +16,7 @@ public class UIManager: IInitializable, IDisposable
     public void Initialize()
     {
         _gamePanel.CoinCounter.Initialize(_saveSystem.Data.Coins);
+        _menuPanel.CoinCounter.Initialize(_saveSystem.Data.Coins);
         
         _gamePanel.Deactivate();
         _pausePanel.Deactivate();
@@ -35,7 +36,7 @@ public class UIManager: IInitializable, IDisposable
     {
         _signalBus.Subscribe<MenuSignal>(OnMenu);
         _signalBus.Subscribe<PauseSignal>(OnPause);
-        _signalBus.Subscribe<ResumeSignal>(OnGame);
+        _signalBus.Subscribe<PlaySignal>(OnGame);
         _signalBus.Subscribe<OnLoseSignal>(OnLose);
         _signalBus.Subscribe<StartGameSignal>(OnGame);
         _signalBus.Subscribe<OnCoinsAddSignal>(AddCoins);
@@ -45,7 +46,7 @@ public class UIManager: IInitializable, IDisposable
     {
         _signalBus.Unsubscribe<MenuSignal>(OnMenu);
         _signalBus.Unsubscribe<PauseSignal>(OnPause);
-        _signalBus.Unsubscribe<ResumeSignal>(OnGame);
+        _signalBus.Unsubscribe<PlaySignal>(OnGame);
         _signalBus.Unsubscribe<OnLoseSignal>(OnLose);
         _signalBus.Unsubscribe<StartGameSignal>(OnGame);
         _signalBus.Unsubscribe<OnCoinsAddSignal>(AddCoins);
@@ -74,6 +75,7 @@ public class UIManager: IInitializable, IDisposable
     private void AddCoins(OnCoinsAddSignal signal)
     {
         _gamePanel.CoinCounter.AddCoins(signal.Value);
+        _menuPanel.CoinCounter.AddCoins(signal.Value);
     }
 
     private void ChangePanel(BasePanel panel)

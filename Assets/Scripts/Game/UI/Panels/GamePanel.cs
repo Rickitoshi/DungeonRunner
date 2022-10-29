@@ -7,4 +7,5 @@ public class GamePanel : BasePanel
     [SerializeField] private CoinCounter coinCounter;
 
     public CoinCounter CoinCounter => coinCounter;
+    
 }

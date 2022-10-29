@@ -3,9 +3,9 @@ using UnityEngine;
 public abstract class PlayerState
 {
     protected readonly PlayerController _player;
-    protected readonly Animator _animator;
+    protected readonly PlayerAnimatorController _animator;
 
-    protected PlayerState(PlayerController player, Animator animator)
+    protected PlayerState(PlayerController player, PlayerAnimatorController animator)
     {
         _player = player;
         _animator = animator;

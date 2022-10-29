@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class MenuPanel : BasePanel
 {
+    [SerializeField] private CoinCounter coinCounter;
+
+    public CoinCounter CoinCounter => coinCounter;
 }
 

@@ -7,7 +7,7 @@ public class Obstacle : MonoBehaviour
     {
         if (other.TryGetComponent(out IObstacleVisitor obstacleVisitor))
         {
-            obstacleVisitor.Visit();
+            obstacleVisitor.ObstacleVisit();
         }
     }
 }
