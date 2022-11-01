@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ public class RoadPart : MonoBehaviour
 
     private Item[] _items;
 
-    private void Awake()
+    public void Awake()
     {
         _items = GetComponentsInChildren<Item>();
     }

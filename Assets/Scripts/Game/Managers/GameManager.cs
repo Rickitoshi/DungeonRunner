@@ -6,7 +6,6 @@ using Zenject;
 public class GameManager: IInitializable,IDisposable
 {
     [Inject] private RoadManager _roadManager;
-    [Inject] private CameraManager _cameraManager;
     [Inject] private SignalBus _signalBus;
     [Inject] private SaveSystem _saveSystem;
     [Inject] private PlayerController _player;
@@ -21,18 +20,16 @@ public class GameManager: IInitializable,IDisposable
 
     public void Dispose()
     {
-        _saveSystem.SaveData();
         Unsubscribe();
     }
 
+    private void OnApplicationFocus()
+    {
+        _saveSystem.SaveData();
+    }
+    
     private void Exit()
     {
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            _saveSystem.SaveData();
-            Unsubscribe();
-        }
-
         Application.Quit();
     }
 
@@ -44,6 +41,7 @@ public class GameManager: IInitializable,IDisposable
         _signalBus.Subscribe<PauseSignal>(Pause);
         _signalBus.Subscribe<PlaySignal>(Play);
         _signalBus.Subscribe<ExitGameSignal>(Exit);
+        _signalBus.Subscribe<OnAppFocusChangeSignal>(OnApplicationFocus);
     }
     
     private void Unsubscribe()
@@ -54,6 +52,7 @@ public class GameManager: IInitializable,IDisposable
         _signalBus.Unsubscribe<PauseSignal>(Pause);
         _signalBus.Unsubscribe<PlaySignal>(Play);
         _signalBus.Unsubscribe<ExitGameSignal>(Exit);
+        _signalBus.Unsubscribe<OnAppFocusChangeSignal>(OnApplicationFocus);
     }
 
     private void Pause()
@@ -63,13 +62,13 @@ public class GameManager: IInitializable,IDisposable
 
     private void Play()
     {
-        _cameraManager.SetLobbyCamera(false);
+        Helper.Instance.LobbyCamera.SetActive(false);
         _player.State = State.Run;
     }
 
     private void Restart()
     {
-        _cameraManager.SetLobbyCamera(true);
+        Helper.Instance.LobbyCamera.SetActive(true);
         _player.SetDefault();
         _roadManager.Restart();
     }

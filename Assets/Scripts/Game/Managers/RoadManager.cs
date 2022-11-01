@@ -6,7 +6,7 @@ public class RoadManager : MonoBehaviour
 {
     [SerializeField] private RoadPart[] roadPartsPool;
     [SerializeField] private int startParts = 2;
-    [SerializeField] private float roadPartLenght;
+    [SerializeField] private float roadPartLenght = 37f;
 
     private Queue<RoadPart> _currentRoad;
     private List<RoadPart> _instantiatedRoadParts;

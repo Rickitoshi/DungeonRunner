@@ -8,6 +8,7 @@ public class UIManager: IInitializable, IDisposable
     [Inject] private PausePanel _pausePanel;
     [Inject] private LosePanel _losePanel;
     [Inject] private MenuPanel _menuPanel;
+    [Inject] private AlwaysOnPanel _alwaysOnPanel;
     [Inject] private SignalBus _signalBus;
     [Inject] private SaveSystem _saveSystem;
 
@@ -15,9 +16,8 @@ public class UIManager: IInitializable, IDisposable
 
     public void Initialize()
     {
-        _gamePanel.CoinCounter.Initialize(_saveSystem.Data.Coins);
-        _menuPanel.CoinCounter.Initialize(_saveSystem.Data.Coins);
-        
+        _alwaysOnPanel.CoinCounter.Initialize(_saveSystem.Data.Coins);
+
         _gamePanel.Deactivate();
         _pausePanel.Deactivate();
         _losePanel.Deactivate();
@@ -74,8 +74,7 @@ public class UIManager: IInitializable, IDisposable
 
     private void AddCoins(OnCoinsAddSignal signal)
     {
-        _gamePanel.CoinCounter.AddCoins(signal.Value);
-        _menuPanel.CoinCounter.AddCoins(signal.Value);
+        _alwaysOnPanel.CoinCounter.AddCoins(signal.Value);
     }
 
     private void ChangePanel(BasePanel panel)

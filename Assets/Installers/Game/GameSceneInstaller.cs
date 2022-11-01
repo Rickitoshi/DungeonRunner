@@ -1,6 +1,7 @@
 using System;
 using Zenject;
 using Signals;
+using UnityEngine;
 
 public class GameSceneInstaller : MonoInstaller
 {
@@ -23,5 +24,6 @@ public class GameSceneInstaller : MonoInstaller
         Container.DeclareSignal<PlaySignal>();
         Container.DeclareSignal<MenuSignal>();
         Container.DeclareSignal<ExitGameSignal>();
+        Container.DeclareSignal<OnAppFocusChangeSignal>();
     }
 }

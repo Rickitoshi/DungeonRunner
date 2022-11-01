@@ -5,12 +5,10 @@ using Zenject;
 
 public class PlayerController : MonoBehaviour, IObstacleVisitor
 {
-    [Header("Move")]
     [SerializeField] private float moveSpeed = 6f ;
     [SerializeField] private float strafeSpeed = 4f ;
-    [SerializeField] private float strafeDistance = 1.5f ;
-
-    [Header("Jump")]
+    [SerializeField,Space(10f)] private float strafeDistance = 1.5f ;
+    
     [SerializeField] private float jumpHeight = 1.3f;
     [SerializeField] private float gravityValue = -9.81f;
 
