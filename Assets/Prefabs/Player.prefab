@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b568fde6c925139469f486bdf42ecf07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reliveOffset: 3.5
   moveSpeed: 5
   strafeSpeed: 4
   strafeDistance: 1.5
@@ -127,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6947654594739702849}
+  - component: {fileID: 60105112}
   m_Layer: 0
   m_Name: View
   m_TagString: Untagged
@@ -150,6 +152,18 @@ Transform:
   m_Father: {fileID: 2605682340226441356}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &60105112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585370024801720151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36c8b437cc525464c95ed1ed1b780435, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2605682339631435298
 PrefabInstance:
   m_ObjectHideFlags: 0

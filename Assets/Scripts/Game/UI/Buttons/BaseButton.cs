@@ -6,8 +6,8 @@ namespace Game.UI.Buttons
 {
     public abstract class BaseButton<T>: MonoBehaviour
     {
-        private SignalBus _signalBus;
-        private Button _button;
+        protected SignalBus _signalBus;
+        protected Button _button;
         
         [Inject]
         private void Construct(SignalBus signalBus)
@@ -20,17 +20,17 @@ namespace Game.UI.Buttons
             _button = GetComponent<Button>();
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             _button.onClick.AddListener(OnClick);
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             _button.onClick.RemoveListener(OnClick);
         }
 
-        private void OnClick()
+        protected virtual void OnClick()
         {
             _signalBus.Fire<T>();
         }

@@ -2,6 +2,7 @@ using System;
 using Signals;
 using UnityEngine;
 using Zenject;
+using DG.Tweening;
 
 public class GameManager: IInitializable,IDisposable
 {
@@ -11,6 +12,7 @@ public class GameManager: IInitializable,IDisposable
     [Inject] private PlayerController _player;
 
     private int _coins;
+    private RoadPart _dieRoadPart;
 
     public void Initialize()
     {
@@ -23,7 +25,7 @@ public class GameManager: IInitializable,IDisposable
         Unsubscribe();
     }
 
-    private void OnApplicationFocus()
+    private void SaveData()
     {
         _saveSystem.SaveData();
     }
@@ -31,28 +33,31 @@ public class GameManager: IInitializable,IDisposable
     private void Exit()
     {
         Application.Quit();
+        SaveData();
     }
 
     private void Subscribe()
     {
-        _signalBus.Subscribe<OnLoseSignal>(Lose);
-        _signalBus.Subscribe<OnCoinsAddSignal>(AddCoins);
+        _signalBus.Subscribe<LoseSignal>(Lose);
+        _signalBus.Subscribe<CoinsAddSignal>(AddCoins);
         _signalBus.Subscribe<MenuSignal>(Restart);
         _signalBus.Subscribe<PauseSignal>(Pause);
         _signalBus.Subscribe<PlaySignal>(Play);
         _signalBus.Subscribe<ExitGameSignal>(Exit);
-        _signalBus.Subscribe<OnAppFocusChangeSignal>(OnApplicationFocus);
+        _signalBus.Subscribe<AppFocusChangeSignal>(SaveData);
+        _signalBus.Subscribe<ReliveSignal>(Relive);
     }
     
     private void Unsubscribe()
     {
-        _signalBus.Unsubscribe<OnLoseSignal>(Lose);
-        _signalBus.Unsubscribe<OnCoinsAddSignal>(AddCoins);
+        _signalBus.Unsubscribe<LoseSignal>(Lose);
+        _signalBus.Unsubscribe<CoinsAddSignal>(AddCoins);
         _signalBus.Unsubscribe<MenuSignal>(Restart);
         _signalBus.Unsubscribe<PauseSignal>(Pause);
         _signalBus.Unsubscribe<PlaySignal>(Play);
         _signalBus.Unsubscribe<ExitGameSignal>(Exit);
-        _signalBus.Unsubscribe<OnAppFocusChangeSignal>(OnApplicationFocus);
+        _signalBus.Unsubscribe<AppFocusChangeSignal>(SaveData);
+        _signalBus.Unsubscribe<ReliveSignal>(Relive);
     }
 
     private void Pause()
@@ -69,16 +74,23 @@ public class GameManager: IInitializable,IDisposable
     private void Restart()
     {
         Helper.Instance.LobbyCamera.SetActive(true);
-        _player.SetDefault();
+        _player.SetLobby();
         _roadManager.Restart();
     }
+
+    private void Relive()
+    {
+        _player.State = State.Run;
+        _dieRoadPart.DeactivateItemsAndObstacles();
+    }
     
-    private void Lose()
+    private void Lose(LoseSignal signal)
     {
         _player.State = State.Die;
+        _dieRoadPart = signal.RoadPart;
     }
 
-    private void AddCoins(OnCoinsAddSignal signal)
+    private void AddCoins(CoinsAddSignal signal)
     {
         if (signal.Value < 0) return;
         

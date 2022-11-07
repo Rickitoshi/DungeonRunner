@@ -3,6 +3,8 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour, IItemCollectorVisitor
 {
+    public bool IsActive => gameObject.activeSelf;
+    
     private bool _isReadyMove;
     private ItemsCollector _target;
     private float _moveSpeed;

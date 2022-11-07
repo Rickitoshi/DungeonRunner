@@ -1,10 +1,14 @@
 using System;
+using DG.Tweening;
 using Signals;
 using UnityEngine;
 using Zenject;
 
 public class PlayerController : MonoBehaviour, IObstacleVisitor
 {
+    
+    
+    [SerializeField] private float reliveOffset = 3;
     [SerializeField] private float moveSpeed = 6f ;
     [SerializeField] private float strafeSpeed = 4f ;
     [SerializeField,Space(10f)] private float strafeDistance = 1.5f ;
@@ -153,15 +157,15 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
         _velocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
     }
 
-    public void ObstacleVisit()
+    public void ObstacleVisit(RoadPart roadPart)
     {
         if (_currentState == State.Run)
         {
-            _signalBus.Fire<OnLoseSignal>();
+            _signalBus.Fire(new LoseSignal(roadPart));
         }
     }
 
-    public void SetDefault()
+    public void SetLobby()
     {
         _controller.Move(_startPosition - transform.position);
         _targetPositionX = 0;

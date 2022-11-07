@@ -45,7 +45,7 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     public void ItemVisit(Coin coin, int cost)
     {
         coin.Deactivate();
-        _signalBus.Fire(new OnCoinsAddSignal(cost));
+        _signalBus.Fire(new CoinsAddSignal(cost));
     }
 
     public void ItemVisit(Magnet magnet)

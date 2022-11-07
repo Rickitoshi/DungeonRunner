@@ -36,7 +36,12 @@ public class Helper : MonoBehaviour
     {
         if (!hasFocus)
         {
-            _signalBus.Fire<OnAppFocusChangeSignal>();
+            _signalBus.Fire<AppFocusChangeSignal>();
         }
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        IronSource.Agent.onApplicationPause(pauseStatus);
     }
 }

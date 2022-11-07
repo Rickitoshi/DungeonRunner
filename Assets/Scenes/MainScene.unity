@@ -123,23 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &60105110 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5585370024801720151, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
-  m_PrefabInstance: {fileID: 285417197}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &60105112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60105110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36c8b437cc525464c95ed1ed1b780435, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &61713913
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,14 +872,6 @@ PrefabInstance:
       propertyPath: _context
       value: 
       objectReference: {fileID: 1124348509}
-    - target: {fileID: 1783932576, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
-      propertyPath: _components.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1783932576, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
-      propertyPath: _components.Array.data[2]
-      value: 
-      objectReference: {fileID: 1061924714}
     - target: {fileID: 2605682340226441355, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1222,7 +1197,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 0.5625, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2372,8 +2347,9 @@ GameObject:
   - component: {fileID: 1024605795}
   - component: {fileID: 1024605794}
   - component: {fileID: 1024605793}
+  - component: {fileID: 1024605796}
   m_Layer: 5
-  m_Name: X2 Button
+  m_Name: Relive Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2398,7 +2374,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 174.89838, y: 100}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 90, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1024605793
 MonoBehaviour:
@@ -2464,7 +2440,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300042, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
+  m_Sprite: {fileID: 21300070, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2482,22 +2458,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024605791}
   m_CullTransparentMesh: 1
+--- !u!114 &1024605796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024605791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7097b04834674b496fea907e8acc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placementName: ResumeRun
 --- !u!4 &1061924709 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2605682340226441356, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
   m_PrefabInstance: {fileID: 285417197}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1061924714 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6627569888947655001, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
-  m_PrefabInstance: {fileID: 285417197}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36c8b437cc525464c95ed1ed1b780435, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1076015502
 GameObject:
   m_ObjectHideFlags: 0
@@ -2909,8 +2887,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 29.979996, y: 27.824322}
-  m_SizeDelta: {x: 50, y: 50}
+  m_AnchoredPosition: {x: 46.817, y: 38}
+  m_SizeDelta: {x: 93.6334, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1328332650
 MonoBehaviour:
@@ -2932,7 +2910,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: X2
+  m_text: Show video
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3612027c2cf059744946631342fd9f9e, type: 2}
   m_sharedMaterial: {fileID: 4793550501910474250, guid: 3612027c2cf059744946631342fd9f9e, type: 2}
@@ -2959,8 +2937,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

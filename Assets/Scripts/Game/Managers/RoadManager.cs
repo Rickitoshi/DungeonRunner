@@ -61,7 +61,7 @@ public class RoadManager : MonoBehaviour
         _instantiatedRoadParts.Remove(_partObject);
         _partObject.transform.localPosition = _partPosition;
         _partObject.gameObject.SetActive(true);
-        _partObject.ResetItems();
+        _partObject.ResetItemsAndObstacles();
         _partPosition.z += roadPartLenght;
         _currentRoad.Enqueue(_partObject);
     }
