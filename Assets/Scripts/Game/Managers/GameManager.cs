@@ -2,7 +2,7 @@ using System;
 using Signals;
 using UnityEngine;
 using Zenject;
-using DG.Tweening;
+using mixpanel;
 
 public class GameManager: IInitializable,IDisposable
 {
@@ -16,6 +16,8 @@ public class GameManager: IInitializable,IDisposable
 
     public void Initialize()
     {
+        Mixpanel.Track("Startup game");
+        
         _coins = _saveSystem.Data.Coins;
         Subscribe();
     }
@@ -69,6 +71,12 @@ public class GameManager: IInitializable,IDisposable
     {
         Helper.Instance.LobbyCamera.SetActive(false);
         _player.State = State.Run;
+
+        var properties = new Value
+        {
+            ["Start coins value"] = _coins
+        };
+        Mixpanel.Track("Start run", properties);
     }
 
     private void Restart()
