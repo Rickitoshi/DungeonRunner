@@ -26,7 +26,5 @@ public class GameSceneInstaller : MonoInstaller
         Container.DeclareSignal<ExitGameSignal>();
         Container.DeclareSignal<AppFocusChangeSignal>();
         Container.DeclareSignal<ReliveSignal>();
-        Container.DeclareSignal<RewardShowSignal>();
-
     }
 }

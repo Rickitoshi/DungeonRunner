@@ -69,7 +69,7 @@ public class GameManager: IInitializable,IDisposable
 
     private void Play()
     {
-        Helper.Instance.LobbyCamera.SetActive(false);
+        GameHelper.Instance.LobbyCamera.SetActive(false);
         _player.State = State.Run;
 
         var properties = new Value
@@ -81,7 +81,7 @@ public class GameManager: IInitializable,IDisposable
 
     private void Restart()
     {
-        Helper.Instance.LobbyCamera.SetActive(true);
+        GameHelper.Instance.LobbyCamera.SetActive(true);
         _player.SetLobby();
         _roadManager.Restart();
     }
@@ -90,12 +90,16 @@ public class GameManager: IInitializable,IDisposable
     {
         _player.State = State.Run;
         _dieRoadPart.DeactivateItemsAndObstacles();
+        
+        Mixpanel.Track("Relive reward");
     }
     
     private void Lose(LoseSignal signal)
     {
         _player.State = State.Die;
         _dieRoadPart = signal.RoadPart;
+        
+        Mixpanel.Track("Player die");
     }
 
     private void AddCoins(CoinsAddSignal signal)

@@ -3,11 +3,11 @@ using Signals;
 using UnityEngine;
 using Zenject;
 
-public class Helper : MonoBehaviour
+public class GameHelper : MonoBehaviour
 {
     [SerializeField] private GameObject playCamera;
     [SerializeField] private GameObject lobbyCamera;
-    public static Helper Instance { get; private set; }
+    public static GameHelper Instance { get; private set; }
 
     public GameObject PlayCamera => playCamera;
     public GameObject LobbyCamera => lobbyCamera;

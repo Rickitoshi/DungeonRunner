@@ -6,9 +6,6 @@ using Zenject;
 
 public class PlayerController : MonoBehaviour, IObstacleVisitor
 {
-    
-    
-    [SerializeField] private float reliveOffset = 3;
     [SerializeField] private float moveSpeed = 6f ;
     [SerializeField] private float strafeSpeed = 4f ;
     [SerializeField,Space(10f)] private float strafeDistance = 1.5f ;
