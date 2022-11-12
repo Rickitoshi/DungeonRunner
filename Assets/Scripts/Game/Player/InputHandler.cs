@@ -7,29 +7,43 @@ public class InputHandler: ITickable
     public bool RightSwipe { get; private set; }
     public bool UpSwipe { get; private set; }
     public bool DownSwipe { get; private set; }
-
+    
+    private Vector3 _prevPos = Vector3.zero;
+    private Vector2 _normalizeDelta =  Vector2.zero;
+    private bool _isHold;
     private bool _isSwiped;
 
     public void Tick()
     {
-        if (Input.touchCount > 0)
+        if (Input.GetMouseButtonDown(0))
         {
-            var touch = Input.GetTouch(0);
-            Vector2 delta = touch.deltaPosition;
+            _isHold = true;
+            _prevPos = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _isHold = false;
+            _prevPos = Vector3.zero;
+        }
+
+        if (_isHold)
+        {
+            CalculateDelta();
             
-            if (delta != Vector2.zero && !_isSwiped)
+            if (_normalizeDelta != Vector2.zero && !_isSwiped)
             {
                 _isSwiped = true;
                 
-                if(Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
+                if(Mathf.Abs(_normalizeDelta.x) > Mathf.Abs(_normalizeDelta.y))
                 {
-                    RightSwipe = delta.x > 0;
-                    LeftSwipe = delta.x < 0;
+                    RightSwipe = _normalizeDelta.x > 0;
+                    LeftSwipe = _normalizeDelta.x < 0;
                 }
                 else
                 {
-                    UpSwipe = delta.y > 0;
-                    DownSwipe = delta.y < 0;
+                    UpSwipe = _normalizeDelta.y > 0;
+                    DownSwipe = _normalizeDelta.y < 0;
                 }
             }
             else
@@ -44,5 +58,15 @@ public class InputHandler: ITickable
         {
             _isSwiped = false;
         }
+    }
+
+    private void CalculateDelta()
+    {
+        Vector3 delta = Input.mousePosition - _prevPos;
+
+        _normalizeDelta.x = delta.x / Screen.width;
+        _normalizeDelta.y = delta.y / Screen.height;
+
+        _prevPos = Input.mousePosition;
     }
 }
