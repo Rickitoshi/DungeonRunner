@@ -8,7 +8,9 @@ public class UIManager: IInitializable, IDisposable
     [Inject] private PausePanel _pausePanel;
     [Inject] private LosePanel _losePanel;
     [Inject] private MenuPanel _menuPanel;
+    [Inject] private MarketPanel _marketPanel;
     [Inject] private AlwaysOnPanel _alwaysOnPanel;
+    
     [Inject] private SignalBus _signalBus;
     [Inject] private SaveSystem _saveSystem;
 
@@ -18,10 +20,11 @@ public class UIManager: IInitializable, IDisposable
     {
         _alwaysOnPanel.CoinCounter.Initialize(_saveSystem.Data.Coins);
 
-        _gamePanel.Deactivate();
-        _pausePanel.Deactivate();
-        _losePanel.Deactivate();
-        _menuPanel.Deactivate();
+        _gamePanel.Initialize();
+        _pausePanel.Initialize();
+        _losePanel.Initialize();
+        _menuPanel.Initialize();
+        _marketPanel.Initialize();
 
         ChangePanel(_menuPanel);
         Subscribe();
@@ -40,6 +43,7 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Subscribe<LoseSignal>(OnLose);
         _signalBus.Subscribe<CoinsAddSignal>(AddCoins);
         _signalBus.Subscribe<ReliveSignal>(OnRelive);
+        _signalBus.Subscribe<MarketSignal>(OnMarket);
     }
 
     private void Unsubscribe()
@@ -50,11 +54,19 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Unsubscribe<LoseSignal>(OnLose);
         _signalBus.Unsubscribe<CoinsAddSignal>(AddCoins);
         _signalBus.Unsubscribe<ReliveSignal>(OnRelive);
+        _signalBus.Unsubscribe<MarketSignal>(OnMarket);
     }
 
     private void OnMenu()
     {
         ChangePanel(_menuPanel);
+        GameHelper.Instance.CameraState = CameraState.Lobby;
+    }
+
+    private void OnMarket()
+    {
+        ChangePanel(_marketPanel);
+        GameHelper.Instance.CameraState = CameraState.Market;
     }
 
     private void OnGame()

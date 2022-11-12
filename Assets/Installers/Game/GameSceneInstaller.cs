@@ -1,7 +1,6 @@
-using System;
 using Zenject;
 using Signals;
-using UnityEngine;
+
 
 public class GameSceneInstaller : MonoInstaller
 {
@@ -26,5 +25,6 @@ public class GameSceneInstaller : MonoInstaller
         Container.DeclareSignal<ExitGameSignal>();
         Container.DeclareSignal<AppFocusChangeSignal>();
         Container.DeclareSignal<ReliveSignal>();
+        Container.DeclareSignal<MarketSignal>();
     }
 }

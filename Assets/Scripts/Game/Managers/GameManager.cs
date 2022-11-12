@@ -34,6 +34,8 @@ public class GameManager: IInitializable,IDisposable
     
     private void Exit()
     {
+        Mixpanel.Track("Shutdown game");
+        
         Application.Quit();
         SaveData();
     }
@@ -69,7 +71,7 @@ public class GameManager: IInitializable,IDisposable
 
     private void Play()
     {
-        GameHelper.Instance.LobbyCamera.SetActive(false);
+        GameHelper.Instance.CameraState = CameraState.Run;
         _player.State = State.Run;
 
         var properties = new Value
@@ -81,7 +83,7 @@ public class GameManager: IInitializable,IDisposable
 
     private void Restart()
     {
-        GameHelper.Instance.LobbyCamera.SetActive(true);
+        GameHelper.Instance.CameraState = CameraState.Lobby;
         _player.SetLobby();
         _roadManager.Restart();
     }
