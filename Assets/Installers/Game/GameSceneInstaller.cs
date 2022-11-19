@@ -8,7 +8,7 @@ public class GameSceneInstaller : MonoInstaller
     {
         Container.BindInterfacesAndSelfTo<AdsManager>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<InputHandler>().AsSingle().NonLazy();
-        Container.BindInterfacesAndSelfTo<SaveSystem>().AsSingle().NonLazy();
+        Container.BindInterfacesAndSelfTo<SaveManager>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<UIManager>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<GameManager>().AsSingle().NonLazy();
 

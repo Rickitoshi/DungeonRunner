@@ -8,7 +8,7 @@ public class GameManager: IInitializable,IDisposable
 {
     [Inject] private RoadManager _roadManager;
     [Inject] private SignalBus _signalBus;
-    [Inject] private SaveSystem _saveSystem;
+    [Inject] private SaveManager _saveManager;
     [Inject] private PlayerController _player;
 
     private int _coins;
@@ -18,7 +18,7 @@ public class GameManager: IInitializable,IDisposable
     {
         Mixpanel.Track("Startup game");
         
-        _coins = _saveSystem.Data.Coins;
+        _coins = _saveManager.Data.Coins;
         Subscribe();
     }
 
@@ -29,13 +29,11 @@ public class GameManager: IInitializable,IDisposable
 
     private void SaveData()
     {
-        _saveSystem.SaveData();
+        _saveManager.SaveData();
     }
     
-    private void Exit()
+    private  void Exit()
     {
-        Mixpanel.Track("Shutdown game");
-        
         Application.Quit();
         SaveData();
     }
@@ -109,6 +107,6 @@ public class GameManager: IInitializable,IDisposable
         if (signal.Value < 0) return;
         
         _coins += signal.Value;
-        _saveSystem.Data.Coins = _coins;
+        _saveManager.Data.Coins = _coins;
     }
 }

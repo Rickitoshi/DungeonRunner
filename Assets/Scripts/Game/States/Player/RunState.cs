@@ -37,6 +37,11 @@ public class RunState : PlayerState
         {
             _player.Jump();
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_player.IsGrounded)
+        {
+            _player.Fall();
+        }
         
 #elif UNITY_ANDROID
 
@@ -53,6 +58,11 @@ public class RunState : PlayerState
         if (_inputHandler.UpSwipe && _player.IsGrounded)
         {
             _player.Jump();
+        }
+
+        if (_inputHandler.DownSwipe && !_player.IsGrounded)
+        {
+            _player.Fall();
         }
 
 #endif

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Zenject;
 
-public class SaveSystem : IInitializable
+public class SaveManager : IInitializable
 {
     private const string SAVE_KEY = "SaveData";
     

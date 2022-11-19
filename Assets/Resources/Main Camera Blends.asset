@@ -17,7 +17,7 @@ MonoBehaviour:
     m_To: CM Play Camera
     m_Blend:
       m_Style: 7
-      m_Time: 2
+      m_Time: 2.5
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -57,7 +57,7 @@ MonoBehaviour:
     m_To: CM Market Camera
     m_Blend:
       m_Style: 1
-      m_Time: 1.5
+      m_Time: 1.25
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -68,7 +68,7 @@ MonoBehaviour:
     m_To: CM Lobby Camera
     m_Blend:
       m_Style: 1
-      m_Time: 1.5
+      m_Time: 1.25
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []

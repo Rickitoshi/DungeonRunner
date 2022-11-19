@@ -1,9 +1,9 @@
-using System;
-using DG.Tweening;
+using Game.Systems;
 using Signals;
 using UnityEngine;
 using Zenject;
 
+[RequireComponent(typeof(GroundCheckSystem))]
 public class PlayerController : MonoBehaviour, IObstacleVisitor
 {
     [SerializeField] private float moveSpeed = 6f ;
@@ -11,9 +11,10 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     [SerializeField,Space(10f)] private float strafeDistance = 1.5f ;
     
     [SerializeField] private float jumpHeight = 1.3f;
+    [SerializeField,Range(0,1)] private float fallForceMultiplier;
     [SerializeField] private float gravityValue = -9.81f;
 
-    public bool IsGrounded{ get; private set; }
+    public bool IsGrounded => _groundCheckSystem.IsGrounded;
 
     public State State
     {
@@ -38,17 +39,18 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
         }
     }
 
+    private GroundCheckSystem _groundCheckSystem;
     private SignalBus _signalBus;
     private InputHandler _inputHandler;
-    private CharacterController _controller;
-    private StateManager _stateManager;
     private PlayerAnimatorController _animator;
     
+    private CharacterController _controller;
     private Vector3 _startPosition;
     private float _targetPositionX;
     private StrafeDirection _strafeDirection;
     private Vector3 _velocity;
 
+    private StateManager _stateManager;
     private State _currentState;
     private RunState _runState;
     private IdleState _idleState;
@@ -63,6 +65,7 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     
     private void Awake()
     {
+        _groundCheckSystem = GetComponent<GroundCheckSystem>();
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<PlayerAnimatorController>();
 
@@ -80,20 +83,19 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     
     private void Update()
     {
-        CheckGround();
         _stateManager.CurrentState.Update();
     }
 
     private void FixedUpdate()
     {
+        CheckGround();
         _stateManager.CurrentState.FixedUpdate();
         Gravity();
     }
     
     private void CheckGround()
     {
-        IsGrounded = _controller.isGrounded;
-        if (IsGrounded && _velocity.y < 0)
+        if (_groundCheckSystem.IsGrounded && _velocity.y < 0)
         {
             _velocity.y = 0f;
         }
@@ -154,6 +156,11 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
         _velocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
     }
 
+    public void Fall()
+    {
+        if (!_groundCheckSystem.IsGrounded) _velocity.y += gravityValue * fallForceMultiplier;
+    }
+    
     public void ObstacleVisit(RoadPart roadPart)
     {
         if (_currentState == State.Run)

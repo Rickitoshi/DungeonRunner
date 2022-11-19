@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2605682340226441361}
   - component: {fileID: 6627569888947655001}
   - component: {fileID: 1783932576}
+  - component: {fileID: 8091730594775578746}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -67,11 +68,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b568fde6c925139469f486bdf42ecf07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reliveOffset: 3.5
-  moveSpeed: 5
-  strafeSpeed: 4
+  moveSpeed: 5.5
+  strafeSpeed: 4.5
   strafeDistance: 1.5
   jumpHeight: 1.5
+  fallForceMultiplier: 0.55
   gravityValue: -12
 --- !u!114 &2605682340226441361
 MonoBehaviour:
@@ -119,6 +120,23 @@ MonoBehaviour:
   _useSceneContext: 0
   _context: {fileID: 0}
   _bindType: 2
+--- !u!114 &8091730594775578746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2605682340226441355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b03c23b4ab34cae93d8253358121fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rayCastDistance: 1
+  groundDistance: 0.3
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &5585370024801720151
 GameObject:
   m_ObjectHideFlags: 0

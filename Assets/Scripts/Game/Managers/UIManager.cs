@@ -12,13 +12,13 @@ public class UIManager: IInitializable, IDisposable
     [Inject] private AlwaysOnPanel _alwaysOnPanel;
     
     [Inject] private SignalBus _signalBus;
-    [Inject] private SaveSystem _saveSystem;
+    [Inject] private SaveManager _saveManager;
 
     private BasePanel _currentPanel;
 
     public void Initialize()
     {
-        _alwaysOnPanel.CoinCounter.Initialize(_saveSystem.Data.Coins);
+        _alwaysOnPanel.CoinCounter.Initialize(_saveManager.Data.Coins);
 
         _gamePanel.Initialize();
         _pausePanel.Initialize();

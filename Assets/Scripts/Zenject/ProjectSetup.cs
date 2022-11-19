@@ -15,6 +15,7 @@ namespace Zenject
         public void Initialize()
         {
             Application.targetFrameRate = _projectSettings.TargetFPS;
+            Input.multiTouchEnabled = _projectSettings.UseMultitouch;
         }
     }
 }
