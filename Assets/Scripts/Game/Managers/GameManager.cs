@@ -17,7 +17,8 @@ public class GameManager: IInitializable,IDisposable
     public void Initialize()
     {
         Mixpanel.Track("Startup game");
-        
+
+        _player.State = State.Idle;
         _coins = _saveManager.Data.Coins;
         Subscribe();
     }
@@ -82,7 +83,8 @@ public class GameManager: IInitializable,IDisposable
     private void Restart()
     {
         GameHelper.Instance.CameraState = CameraState.Lobby;
-        _player.SetLobby();
+        _player.SetDefaultPosition();
+        _player.State = State.Idle;
         _roadManager.Restart();
     }
 

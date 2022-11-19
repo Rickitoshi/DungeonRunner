@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class RunState : PlayerState
@@ -12,11 +13,12 @@ public class RunState : PlayerState
     public override void Enter()
     {
         _animator.SetRun();
+        DOTween.Play(_player.gameObject.transform);
     }
 
     public override void Exit()
     {
-        
+        DOTween.Pause(_player.gameObject.transform);
     }
 
     public override void Update()
@@ -71,10 +73,5 @@ public class RunState : PlayerState
     public override void  FixedUpdate()
     {
         _player.MoveForward();
-        
-        if (_player.IsReadyToStrafe())
-        {
-            _player.Strafe();
-        }
     }
 }

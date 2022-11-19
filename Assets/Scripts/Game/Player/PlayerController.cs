@@ -1,17 +1,20 @@
+using DG.Tweening;
 using Game.Systems;
 using Signals;
 using UnityEngine;
 using Zenject;
 
 [RequireComponent(typeof(GroundCheckSystem))]
-public class PlayerController : MonoBehaviour, IObstacleVisitor
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 6f ;
-    [SerializeField] private float strafeSpeed = 4f ;
-    [SerializeField,Space(10f)] private float strafeDistance = 1.5f ;
-    
+    [Space(10f)]
+    [SerializeField] private float strafeDuration = 0.4f ;
+    [SerializeField] private float strafeDistance = 1.5f ;
+    [Space(10f)]
     [SerializeField] private float jumpHeight = 1.3f;
     [SerializeField,Range(0,1)] private float fallForceMultiplier;
+    [Space(10f)]
     [SerializeField] private float gravityValue = -9.81f;
 
     public bool IsGrounded => _groundCheckSystem.IsGrounded;
@@ -40,14 +43,11 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     }
 
     private GroundCheckSystem _groundCheckSystem;
-    private SignalBus _signalBus;
     private InputHandler _inputHandler;
     private PlayerAnimatorController _animator;
     
-    private CharacterController _controller;
     private Vector3 _startPosition;
     private float _targetPositionX;
-    private StrafeDirection _strafeDirection;
     private Vector3 _velocity;
 
     private StateManager _stateManager;
@@ -57,16 +57,14 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     private FailState _failState;
 
     [Inject]
-    private void Construct(SignalBus signalBus,InputHandler inputHandler)
+    private void Construct(InputHandler inputHandler)
     {
-        _signalBus = signalBus;
         _inputHandler = inputHandler;
     }
     
     private void Awake()
     {
         _groundCheckSystem = GetComponent<GroundCheckSystem>();
-        _controller = GetComponent<CharacterController>();
         _animator = GetComponent<PlayerAnimatorController>();
 
         _stateManager = new StateManager();
@@ -78,7 +76,6 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     private void Start()
     {
         _startPosition = transform.position;
-        State = State.Idle;
     }
     
     private void Update()
@@ -88,8 +85,8 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
 
     private void FixedUpdate()
     {
-        CheckGround();
         _stateManager.CurrentState.FixedUpdate();
+        CheckGround();
         Gravity();
     }
     
@@ -104,7 +101,12 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     private void Gravity()
     {
         _velocity.y += gravityValue * Time.deltaTime;
-        _controller.Move(_velocity * Time.deltaTime);
+        transform.position += _velocity * Time.deltaTime;
+    }
+    
+    private void Strafe()
+    {
+        transform.DOMoveX(_targetPositionX, strafeDuration);
     }
     
     public void SwitchSide(StrafeDirection strafeDirection)
@@ -118,37 +120,13 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
                 _targetPositionX += strafeDistance;
                 break;
         }
-        _strafeDirection = strafeDirection;
-    }
-    
-    public void Strafe()
-    {
-        if (_strafeDirection == StrafeDirection.Left)
-        {
-            _controller.Move(Vector3.left * (strafeSpeed * Time.deltaTime));
-        }
-        else
-        {
-            _controller.Move(Vector3.right * (strafeSpeed * Time.deltaTime));
-        }
-    }
-    
-    public bool IsReadyToStrafe()
-    {
-        if (_strafeDirection == StrafeDirection.Right)
-        {
-            return transform.position.x - _targetPositionX < 0;  
-        }
-        else
-        {
-            return transform.position.x - _targetPositionX > 0;  
-        }
+
+        Strafe();
     }
 
-    
     public void MoveForward()
     {
-        _controller.Move(Vector3.forward * (moveSpeed  * Time.deltaTime));
+        transform.position += Vector3.forward * (moveSpeed * Time.deltaTime);
     }
     
     public void Jump()
@@ -160,20 +138,12 @@ public class PlayerController : MonoBehaviour, IObstacleVisitor
     {
         if (!_groundCheckSystem.IsGrounded) _velocity.y += gravityValue * fallForceMultiplier;
     }
-    
-    public void ObstacleVisit(RoadPart roadPart)
-    {
-        if (_currentState == State.Run)
-        {
-            _signalBus.Fire(new LoseSignal(roadPart));
-        }
-    }
 
-    public void SetLobby()
+    public void SetDefaultPosition()
     {
-        _controller.Move(_startPosition - transform.position);
+        transform.position = _startPosition;
+        DOTween.Kill(transform);
         _targetPositionX = 0;
-        State = State.Idle;
     }
 }
 

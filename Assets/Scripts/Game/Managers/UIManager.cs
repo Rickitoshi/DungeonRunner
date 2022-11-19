@@ -42,7 +42,7 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Subscribe<PlaySignal>(OnGame);
         _signalBus.Subscribe<LoseSignal>(OnLose);
         _signalBus.Subscribe<CoinsAddSignal>(AddCoins);
-        _signalBus.Subscribe<ReliveSignal>(OnRelive);
+        _signalBus.Subscribe<ReliveSignal>(OnGame);
         _signalBus.Subscribe<MarketSignal>(OnMarket);
     }
 
@@ -53,7 +53,7 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Unsubscribe<PlaySignal>(OnGame);
         _signalBus.Unsubscribe<LoseSignal>(OnLose);
         _signalBus.Unsubscribe<CoinsAddSignal>(AddCoins);
-        _signalBus.Unsubscribe<ReliveSignal>(OnRelive);
+        _signalBus.Unsubscribe<ReliveSignal>(OnGame);
         _signalBus.Unsubscribe<MarketSignal>(OnMarket);
     }
 
@@ -84,11 +84,6 @@ public class UIManager: IInitializable, IDisposable
         ChangePanel(_losePanel);
     }
 
-    private void OnRelive()
-    {
-        ChangePanel(_gamePanel);
-    }
-    
     private void AddCoins(CoinsAddSignal signal)
     {
         _alwaysOnPanel.CoinCounter.AddCoins(signal.Value);

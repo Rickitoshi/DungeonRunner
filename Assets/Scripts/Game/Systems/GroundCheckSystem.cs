@@ -18,7 +18,7 @@ namespace Game.Systems
             if (Physics.Raycast(ray, out RaycastHit hit, rayCastDistance,layerMask.value))
             {
                 var hitPosition = hit.point;
-                IsGrounded = Vector3.SqrMagnitude(hitPosition - position) <= groundDistance;
+                IsGrounded = Vector3.SqrMagnitude(position - hitPosition) <= groundDistance;
             }
         }
     }
