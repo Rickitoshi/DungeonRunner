@@ -8,6 +8,7 @@ public abstract class Item : MonoBehaviour, IItemMagnetVisitor
     
     private ItemsCollector _target;
     private float _moveSpeed;
+    private Vector3 _defaultPosition;
     
     public void MagnetVisit(ItemsCollector collector,float moveSpeed)
     {
@@ -16,6 +17,7 @@ public abstract class Item : MonoBehaviour, IItemMagnetVisitor
             IsMagnetized = true;
             _target = collector;
             _moveSpeed = moveSpeed;
+            _defaultPosition = transform.localPosition;
         }
     }
 
@@ -38,6 +40,10 @@ public abstract class Item : MonoBehaviour, IItemMagnetVisitor
     
     public void Activate()
     {
+        if (_defaultPosition != Vector3.zero)
+        {
+            transform.localPosition = _defaultPosition;
+        }
         gameObject.SetActive(true);
     }
     

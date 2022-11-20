@@ -29,7 +29,6 @@ namespace Game.UI.Buttons.Ads
         {
             base.Unsubscribe();
             SignalBus.Unsubscribe<MarketSignal>(CheckAvailable);
-            
         }
 
         protected override void OnRewardVideoFinish(IronSourcePlacement placement, IronSourceAdInfo info)
