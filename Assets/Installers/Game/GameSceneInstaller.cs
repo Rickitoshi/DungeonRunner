@@ -26,5 +26,6 @@ public class GameSceneInstaller : MonoInstaller
         Container.DeclareSignal<AppFocusChangeSignal>();
         Container.DeclareSignal<ReliveSignal>();
         Container.DeclareSignal<MarketSignal>();
+        Container.DeclareSignal<MagnetSignal>();
     }
 }

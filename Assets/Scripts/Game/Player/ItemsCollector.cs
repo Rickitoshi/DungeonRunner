@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Signals;
 using UnityEngine;
@@ -5,53 +6,59 @@ using Zenject;
 
 public class ItemsCollector : MonoBehaviour, IItemVisitor
 {
-    [SerializeField] private float magnetDuration = 5;
-    [SerializeField] private float itemMoveSpeed = 9;
-    [SerializeField] private Vector3 magnetZone;
-
-    private SignalBus _signalBus;
-    private bool _isMagnetActive;
+    [SerializeField] private float magneticRadius;
+    [SerializeField] private LayerMask mask;
     
+    private SignalBus _signalBus;
+    
+    private bool _isMagnetActive;
+    private float _magnetDuration;
+    private float _itemMoveSpeed;
+    private Collider[] _colliders;
+
     [Inject]
     private void Construct(SignalBus signalBus)
     {
         _signalBus = signalBus;
-    }
-    
-    
-    private void FixedUpdate()
-    {
-        if (_isMagnetActive)
-        {
-            SearchVisitor();
-        }
+        _colliders = new Collider[3];
     }
 
-    private void SearchVisitor()
+    private void FixedUpdate()
     {
-        Collider[] entities = Physics.OverlapBox(transform.position, magnetZone);
-        if (entities.Length > 0)
+        if (!_isMagnetActive) return;
+
+        PullItem();
+    }
+
+    private void PullItem()
+    {
+        int count= Physics.OverlapSphereNonAlloc(transform.position, magneticRadius, _colliders, mask);
+        if (count > 0)
         {
-            foreach (var entity in entities)
+            for (var i = 0; i < count; i++)
             {
-                if (entity.TryGetComponent(out IItemCollectorVisitor visitor))
+                var entity = _colliders[i];
+                if (entity.TryGetComponent(out IItemMagnetVisitor visitor))
                 {
-                    visitor.CollectorVisit(this, itemMoveSpeed);
+                    visitor.MagnetVisit(this, _itemMoveSpeed);
                 }
             }
         }
     }
 
-    public void ItemVisit(Coin coin, int cost)
+    public void ItemVisit(Coin coin)
     {
         coin.Deactivate();
-        _signalBus.Fire(new CoinsAddSignal(cost));
+        _signalBus.Fire(new CoinsAddSignal(coin.Value));
     }
 
     public void ItemVisit(Magnet magnet)
     {
-        ActivateMagnet();
+        _magnetDuration = magnet.Duration;
+        _itemMoveSpeed = magnet.MagnetizationRate;
+        _signalBus.Fire(new MagnetSignal(_magnetDuration));
         magnet.Deactivate();
+        ActivateMagnet();
     }
     
     private void ActivateMagnet()
@@ -62,12 +69,12 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
 
     private IEnumerator DeactivateMagnet()
     {
-        yield return new WaitForSeconds(magnetDuration);
+        yield return new WaitForSeconds(_magnetDuration);
         _isMagnetActive = false;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position, magnetZone);
+        Gizmos.DrawWireSphere(transform.position, magneticRadius);
     }
 }

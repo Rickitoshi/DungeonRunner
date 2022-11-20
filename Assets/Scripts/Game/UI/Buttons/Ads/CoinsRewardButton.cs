@@ -1,4 +1,6 @@
 using Signals;
+using TMPro;
+using UnityEngine;
 
 namespace Game.UI.Buttons.Ads
 {
@@ -8,26 +10,28 @@ namespace Game.UI.Buttons.Ads
         {
 #if  UNITY_EDITOR
 
-            SignalBus.Fire(new CoinsAddSignal(200));
+            SignalBus.Fire(new CoinsAddSignal(500));
 
-#elif UNITY_ANDROID
+//#elif UNITY_ANDROID
 
             IronSource.Agent.showRewardedVideo(AdsManager.COINS_REWARD);
 #endif
         }
-        
+
         protected override void Subscribe()
         {
             base.Subscribe();
+            SignalBus.Subscribe<MarketSignal>(CheckAvailable);
             
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
+            SignalBus.Unsubscribe<MarketSignal>(CheckAvailable);
             
         }
-        
+
         protected override void OnRewardVideoFinish(IronSourcePlacement placement, IronSourceAdInfo info)
         {
             if (placement.getPlacementName() == AdsManager.COINS_REWARD)

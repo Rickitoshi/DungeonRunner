@@ -12,7 +12,6 @@ public class GameManager: IInitializable,IDisposable
     [Inject] private PlayerController _player;
 
     private int _coins;
-    private RoadPart _dieRoadPart;
 
     public void Initialize()
     {
@@ -83,7 +82,7 @@ public class GameManager: IInitializable,IDisposable
     private void Restart()
     {
         GameHelper.Instance.CameraState = CameraState.Lobby;
-        _player.SetDefaultPosition();
+        _player.SetDefault();
         _player.State = State.Idle;
         _roadManager.Restart();
     }
@@ -91,16 +90,14 @@ public class GameManager: IInitializable,IDisposable
     private void Relive()
     {
         _player.State = State.Run;
-        _dieRoadPart.DeactivateItemsAndObstacles();
-        
+        _player.Relive();
         Mixpanel.Track("Relive reward");
     }
     
-    private void Lose(LoseSignal signal)
+    private void Lose()
     {
         _player.State = State.Die;
-        _dieRoadPart = signal.RoadPart;
-        
+
         Mixpanel.Track("Player die");
     }
 

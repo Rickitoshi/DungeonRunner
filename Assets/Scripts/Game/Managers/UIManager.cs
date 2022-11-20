@@ -44,6 +44,7 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Subscribe<CoinsAddSignal>(AddCoins);
         _signalBus.Subscribe<ReliveSignal>(OnGame);
         _signalBus.Subscribe<MarketSignal>(OnMarket);
+        _signalBus.Subscribe<MagnetSignal>(OnMagnet);
     }
 
     private void Unsubscribe()
@@ -55,6 +56,7 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Unsubscribe<CoinsAddSignal>(AddCoins);
         _signalBus.Unsubscribe<ReliveSignal>(OnGame);
         _signalBus.Unsubscribe<MarketSignal>(OnMarket);
+        _signalBus.Unsubscribe<MagnetSignal>(OnMagnet);
     }
 
     private void OnMenu()
@@ -82,6 +84,11 @@ public class UIManager: IInitializable, IDisposable
     private void OnLose()
     {
         ChangePanel(_losePanel);
+    }
+
+    private void OnMagnet(MagnetSignal signal)
+    {
+        _gamePanel.Magnet.Execute(signal.Duration);
     }
 
     private void AddCoins(CoinsAddSignal signal)

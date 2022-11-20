@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5471931244593866667}
   - component: {fileID: 2878533975373452759}
   - component: {fileID: 884035267757163598}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Magnit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,6 +80,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 429fa2f211e95a347ba571e9a4e031ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  duration: 10
+  magnetizationRate: 9
 --- !u!1 &7470292398784027470
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +94,7 @@ GameObject:
   - component: {fileID: 7470292398784027459}
   - component: {fileID: 7470292398784027469}
   - component: {fileID: 7470292398784027468}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MagnetView
   m_TagString: Untagged
   m_Icon: {fileID: 0}

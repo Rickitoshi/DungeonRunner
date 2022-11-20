@@ -1,24 +1,30 @@
 using DG.Tweening;
+using Game.Systems;
 using UnityEngine;
+
 
 public class RunState : PlayerState
 {
-    private InputHandler _inputHandler;
+    private readonly InputHandler _inputHandler;
+    private readonly PlayerMoveSystem _moveSystem;
     
-    public RunState(PlayerController player, PlayerAnimatorController animator, InputHandler inputHandler) : base(player, animator)
+    public RunState(PlayerMoveSystem moveSystem, PlayerAnimatorController animator, InputHandler inputHandler) : base(animator)
     {
         _inputHandler = inputHandler;
+        _moveSystem = moveSystem;
     }
     
     public override void Enter()
     {
         _animator.SetRun();
-        DOTween.Play(_player.gameObject.transform);
+        _moveSystem.IsActive = true;
+        DOTween.Play(_moveSystem.gameObject.transform);
     }
 
     public override void Exit()
     {
-        DOTween.Pause(_player.gameObject.transform);
+        _moveSystem.IsActive = false;
+        DOTween.Pause(_moveSystem.gameObject.transform);
     }
 
     public override void Update()
@@ -27,44 +33,44 @@ public class RunState : PlayerState
         
         if (Input.GetKeyDown(KeyCode.D))
         {
-            _player.SwitchSide(StrafeDirection.Right);
+            _moveSystem.SwitchSide(StrafeDirection.Right);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            _player.SwitchSide(StrafeDirection.Left);
+            _moveSystem.SwitchSide(StrafeDirection.Left);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && _player.IsGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && _moveSystem.IsGrounded)
         {
-            _player.Jump();
+            _moveSystem.Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_player.IsGrounded)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_moveSystem.IsGrounded)
         {
-            _player.Fall();
+            _moveSystem.Fall();
         }
         
 #elif UNITY_ANDROID
 
         if (_inputHandler.RightSwipe)
         {
-            _player.SwitchSide(StrafeDirection.Right);
+            _moveSystem.SwitchSide(StrafeDirection.Right);
         }
 
         if (_inputHandler.LeftSwipe)
         {
-            _player.SwitchSide(StrafeDirection.Left);
+            _moveSystem.SwitchSide(StrafeDirection.Left);
         }
 
-        if (_inputHandler.UpSwipe && _player.IsGrounded)
+        if (_inputHandler.UpSwipe && _moveSystem.IsGrounded)
         {
-            _player.Jump();
+            _moveSystem.Jump();
         }
 
-        if (_inputHandler.DownSwipe && !_player.IsGrounded)
+        if (_inputHandler.DownSwipe && !_moveSystem.IsGrounded)
         {
-            _player.Fall();
+            _moveSystem.Fall();
         }
 
 #endif
@@ -72,6 +78,6 @@ public class RunState : PlayerState
 
     public override void  FixedUpdate()
     {
-        _player.MoveForward();
+        _moveSystem.MoveForward();
     }
 }

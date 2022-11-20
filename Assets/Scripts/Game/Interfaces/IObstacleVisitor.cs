@@ -1,4 +1,4 @@
 public interface IObstacleVisitor
 {
-    public void ObstacleVisit(RoadPart roadPart);
+    public void ObstacleVisit(int damage);
 }

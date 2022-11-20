@@ -2,7 +2,7 @@ using DG.Tweening;
 
 public class IdleState: PlayerState
 {
-    public IdleState(PlayerController player, PlayerAnimatorController animator) : base(player, animator)
+    public IdleState(PlayerAnimatorController animator) : base(animator)
     {
         
     }

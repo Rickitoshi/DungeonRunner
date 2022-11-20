@@ -20,7 +20,10 @@ namespace Game.UI.Buttons.Ads
 
         protected void CheckAvailable()
         {
-            if (!IronSource.Agent.isRewardedVideoAvailable()) SetInteractable(false);
+            if (!IronSource.Agent.isRewardedVideoAvailable())
+            {
+                SetInteractable(false);
+            }
         }
 
         protected void ResetInteractable()

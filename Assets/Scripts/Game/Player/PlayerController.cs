@@ -1,23 +1,14 @@
-using DG.Tweening;
 using Game.Systems;
 using Signals;
 using UnityEngine;
 using Zenject;
 
-[RequireComponent(typeof(GroundCheckSystem))]
+[RequireComponent(typeof(HealthSystem))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 6f ;
-    [Space(10f)]
-    [SerializeField] private float strafeDuration = 0.4f ;
-    [SerializeField] private float strafeDistance = 1.5f ;
-    [Space(10f)]
-    [SerializeField] private float jumpHeight = 1.3f;
-    [SerializeField,Range(0,1)] private float fallForceMultiplier;
-    [Space(10f)]
-    [SerializeField] private float gravityValue = -9.81f;
-
-    public bool IsGrounded => _groundCheckSystem.IsGrounded;
+    [SerializeField] private PlayerMoveSystem playerMoveSystem;
+    [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private PlayerAnimatorController animatorController;
 
     public State State
     {
@@ -41,15 +32,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    private GroundCheckSystem _groundCheckSystem;
-    private InputHandler _inputHandler;
-    private PlayerAnimatorController _animator;
     
-    private Vector3 _startPosition;
-    private float _targetPositionX;
-    private Vector3 _velocity;
-
+    private InputHandler _inputHandler;
+    private SignalBus _signalBus;
+    
     private StateManager _stateManager;
     private State _currentState;
     private RunState _runState;
@@ -57,27 +43,27 @@ public class PlayerController : MonoBehaviour
     private FailState _failState;
 
     [Inject]
-    private void Construct(InputHandler inputHandler)
+    private void Construct(InputHandler inputHandler,SignalBus signalBus)
     {
         _inputHandler = inputHandler;
+        _signalBus = signalBus;
     }
     
     private void Awake()
     {
-        _groundCheckSystem = GetComponent<GroundCheckSystem>();
-        _animator = GetComponent<PlayerAnimatorController>();
-
+        Subscribe();
+        
         _stateManager = new StateManager();
-        _runState = new RunState(this, _animator, _inputHandler);
-        _idleState = new IdleState(this, _animator);
-        _failState = new FailState(this, _animator);
+        _runState = new RunState(playerMoveSystem, animatorController, _inputHandler);
+        _idleState = new IdleState(animatorController);
+        _failState = new FailState(animatorController);
     }
 
-    private void Start()
+    private void OnDestroy()
     {
-        _startPosition = transform.position;
+        Unsubscribe();
     }
-    
+
     private void Update()
     {
         _stateManager.CurrentState.Update();
@@ -86,64 +72,32 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         _stateManager.CurrentState.FixedUpdate();
-        CheckGround();
-        Gravity();
     }
+
+    private void Subscribe()
+    {
+        healthSystem.OnDie += OnHealthEnd;
+    }  
     
-    private void CheckGround()
+    private void Unsubscribe()
     {
-        if (_groundCheckSystem.IsGrounded && _velocity.y < 0)
-        {
-            _velocity.y = 0f;
-        }
+        healthSystem.OnDie -= OnHealthEnd;
     }
 
-    private void Gravity()
+    private void OnHealthEnd()
     {
-        _velocity.y += gravityValue * Time.deltaTime;
-        transform.position += _velocity * Time.deltaTime;
-    }
-    
-    private void Strafe()
-    {
-        transform.DOMoveX(_targetPositionX, strafeDuration);
-    }
-    
-    public void SwitchSide(StrafeDirection strafeDirection)
-    {
-        switch (strafeDirection)
-        {
-            case StrafeDirection.Left when _targetPositionX > -strafeDistance:
-                _targetPositionX -= strafeDistance;
-                break;
-            case StrafeDirection.Right when _targetPositionX < strafeDistance:
-                _targetPositionX += strafeDistance;
-                break;
-        }
-
-        Strafe();
+        _signalBus.Fire<LoseSignal>();
     }
 
-    public void MoveForward()
+    public void SetDefault()
     {
-        transform.position += Vector3.forward * (moveSpeed * Time.deltaTime);
-    }
-    
-    public void Jump()
-    {
-        _velocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
+        playerMoveSystem.SetDefaultPosition();
+        Relive();
     }
 
-    public void Fall()
+    public void Relive()
     {
-        if (!_groundCheckSystem.IsGrounded) _velocity.y += gravityValue * fallForceMultiplier;
-    }
-
-    public void SetDefaultPosition()
-    {
-        transform.position = _startPosition;
-        DOTween.Kill(transform);
-        _targetPositionX = 0;
+        healthSystem.Reset();
     }
 }
 
@@ -153,11 +107,4 @@ public enum State
     Run,
     Idle,
     Die
-}
-
-public enum StrafeDirection
-{
-    None,
-    Left,
-    Right
 }

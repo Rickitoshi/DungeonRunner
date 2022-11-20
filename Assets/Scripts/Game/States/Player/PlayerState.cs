@@ -2,12 +2,10 @@ using UnityEngine;
 
 public abstract class PlayerState
 {
-    protected readonly PlayerController _player;
     protected readonly PlayerAnimatorController _animator;
 
-    protected PlayerState(PlayerController player, PlayerAnimatorController animator)
+    protected PlayerState(PlayerAnimatorController animator)
     {
-        _player = player;
         _animator = animator;
     }
     

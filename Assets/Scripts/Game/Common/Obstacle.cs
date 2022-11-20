@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
+    [SerializeField] private int damage = 1;
+    
     public bool IsActive => gameObject.activeSelf;
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out IObstacleVisitor obstacleVisitor))
         {
-            obstacleVisitor.ObstacleVisit(gameObject.GetComponentInParent<RoadPart>());
+            obstacleVisitor.ObstacleVisit(damage);
         }
     }
 

@@ -1,19 +1,19 @@
 using System;
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour, IItemCollectorVisitor
+public abstract class Item : MonoBehaviour, IItemMagnetVisitor
 {
     public bool IsActive => gameObject.activeSelf;
+    public bool IsMagnetized { get; private set; }
     
-    private bool _isReadyMove;
     private ItemsCollector _target;
     private float _moveSpeed;
     
-    public void CollectorVisit(ItemsCollector collector,float moveSpeed)
+    public void MagnetVisit(ItemsCollector collector,float moveSpeed)
     {
-        if (!_isReadyMove)
+        if (!IsMagnetized)
         {
-            _isReadyMove = true;
+            IsMagnetized = true;
             _target = collector;
             _moveSpeed = moveSpeed;
         }
@@ -21,7 +21,7 @@ public abstract class Item : MonoBehaviour, IItemCollectorVisitor
 
     protected virtual void FixedUpdate()
     {
-        if (_isReadyMove)
+        if (IsMagnetized)
         {
             transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _moveSpeed * Time.deltaTime);
         }
@@ -32,7 +32,7 @@ public abstract class Item : MonoBehaviour, IItemCollectorVisitor
         if (other.TryGetComponent(out IItemVisitor itemVisitor))
         {
             Visit(itemVisitor);
-            _isReadyMove = false;
+            IsMagnetized = false;
         }
     }
     

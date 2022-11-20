@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PlayerAnimatorController : MonoBehaviour
@@ -15,7 +14,7 @@ public class PlayerAnimatorController : MonoBehaviour
 
     private void Awake()
     {
-        _animator = GetComponentInChildren<Animator>();
+        _animator = GetComponent<Animator>();
     }
 
     public void SetIdle()

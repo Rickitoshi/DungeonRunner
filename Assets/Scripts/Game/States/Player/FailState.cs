@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FailState: PlayerState
 {
-    public FailState(PlayerController player, PlayerAnimatorController animator) : base(player, animator)
+    public FailState(PlayerAnimatorController animator) : base(animator)
     {
     }
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7688097096985680142}
   - component: {fileID: 1998249056799924496}
   - component: {fileID: 6413009560541980776}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae826513867ee154086bc3334c2a1a2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cost: 5
+  value: 5
 --- !u!1 &6192854119499940125
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 6192854119499940118}
   - component: {fileID: 6192854119499940120}
   - component: {fileID: 6192854119499940123}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CoinView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
