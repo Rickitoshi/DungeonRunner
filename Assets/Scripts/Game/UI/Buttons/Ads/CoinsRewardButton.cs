@@ -6,36 +6,40 @@ namespace Game.UI.Buttons.Ads
 {
     public class CoinsRewardButton: BaseRewardButton
     {
+        [SerializeField] private TextMeshProUGUI textMesh;
+        
+        private int _coinsReward;
+        
         protected override void OnClick()
         {
-#if  UNITY_EDITOR
-
-            SignalBus.Fire(new CoinsAddSignal(500));
-
-//#elif UNITY_ANDROID
-
             IronSource.Agent.showRewardedVideo(AdsManager.COINS_REWARD);
-#endif
         }
-
-        protected override void Subscribe()
+        
+        [ContextMenu("GetReward")]
+        protected override void GetReward()
         {
-            base.Subscribe();
-            SignalBus.Subscribe<MarketSignal>(CheckAvailable);
-            
+            SignalBus.Fire(new CoinsAddSignal(_coinsReward));
         }
-
-        protected override void Unsubscribe()
+        
+        protected override void OnAvailableChange(bool value)
         {
-            base.Unsubscribe();
-            SignalBus.Unsubscribe<MarketSignal>(CheckAvailable);
+            if (value)
+            {
+                _coinsReward = IronSource.Agent.getPlacementInfo(AdsManager.COINS_REWARD).getRewardAmount();
+                textMesh.text = $"+{_coinsReward}";
+            }
+            else
+            {
+                textMesh.text ="-----";
+            }
+            SetInteractable(value);
         }
-
+        
         protected override void OnRewardVideoFinish(IronSourcePlacement placement, IronSourceAdInfo info)
         {
             if (placement.getPlacementName() == AdsManager.COINS_REWARD)
             {
-                SignalBus.Fire(new CoinsAddSignal(placement.getRewardAmount()));
+                GetReward();
             }
         }
     }

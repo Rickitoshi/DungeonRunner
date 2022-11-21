@@ -64,13 +64,14 @@ public class GameManager: IInitializable,IDisposable
 
     private void Pause()
     {
-        _player.State = State.Idle;
+        Time.timeScale = 0;
     }
 
     private void Play()
     {
         GameHelper.Instance.CameraState = CameraState.Run;
         _player.State = State.Run;
+        Time.timeScale = 1;
 
         var properties = new Value
         {

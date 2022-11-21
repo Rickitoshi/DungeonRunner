@@ -10,12 +10,12 @@ QualitySettings:
     name: Default
     pixelLightCount: 1
     shadows: 1
-    shadowResolution: 1
+    shadowResolution: 2
     shadowProjection: 1
     shadowCascades: 1
     shadowDistance: 50
     shadowNearPlaneOffset: 1
-    shadowCascade2Split: 0.56121194
+    shadowCascade2Split: 0.258182
     shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
     shadowmaskMode: 0
     skinWeights: 2

@@ -6,21 +6,15 @@ namespace Game.UI.Buttons.Game
 {
     public abstract class BaseButton: MonoBehaviour
     {
-        protected SignalBus SignalBus;
+        [Inject] protected SignalBus SignalBus;
         protected Button Button;
-        
-        [Inject]
-        private void Construct(SignalBus signalBus)
-        {
-            SignalBus = signalBus;
-        }
 
         private void Awake()
         {
             Button = GetComponent<Button>();
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             Subscribe();
         }
