@@ -17,15 +17,17 @@ public class GameSceneInstaller : MonoInstaller
 
     private void BindSignals()
     {
-        Container.DeclareSignal<CoinsAddSignal>();
-        Container.DeclareSignal<LoseSignal>();
+        Container.DeclareSignal<CoinsPickUpSignal>();
+        Container.DeclareSignal<PlayerDieSignal>();
         Container.DeclareSignal<PauseSignal>();
         Container.DeclareSignal<PlaySignal>();
-        Container.DeclareSignal<MenuSignal>();
+        Container.DeclareSignal<BackToLobbySignal>();
         Container.DeclareSignal<ExitGameSignal>();
         Container.DeclareSignal<AppFocusChangeSignal>();
         Container.DeclareSignal<ReliveSignal>();
         Container.DeclareSignal<MarketSignal>();
         Container.DeclareSignal<MagnetSignal>();
+        Container.DeclareSignal<PlayerRespawnPhaseEndedSignal>();
+        Container.DeclareSignal<BackToMenuSignal>();
     }
 }

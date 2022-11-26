@@ -23,13 +23,13 @@ namespace Game.UI.Buttons.Ads
         protected override void Subscribe()
         {
             base.Subscribe();
-            SignalBus.Subscribe<MenuSignal>(Reset);
+            SignalBus.Subscribe<BackToLobbySignal>(Reset);
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            SignalBus.Unsubscribe<MenuSignal>(Reset);
+            SignalBus.Unsubscribe<BackToLobbySignal>(Reset);
         }
 
         private void Reset()

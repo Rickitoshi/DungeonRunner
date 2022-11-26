@@ -26,4 +26,9 @@ public abstract class BasePanel : MonoBehaviour
     {
         DOTween.To(value => { _canvasGroup.alpha = value; }, _canvasGroup.alpha, 0, 0.1f).OnComplete(() => {gameObject.SetActive(false);});
     }
+
+    public void SetInteractable(bool value)
+    {
+        _canvasGroup.interactable = value;
+    }
 }

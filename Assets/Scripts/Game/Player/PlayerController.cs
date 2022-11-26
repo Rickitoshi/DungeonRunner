@@ -3,12 +3,13 @@ using Signals;
 using UnityEngine;
 using Zenject;
 
-[RequireComponent(typeof(HealthSystem))]
+[RequireComponent(typeof(HealthSystem),typeof(RespawnSystem))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerMoveSystem playerMoveSystem;
     [SerializeField] private HealthSystem healthSystem;
     [SerializeField] private PlayerAnimatorController animatorController;
+    [SerializeField] private RespawnSystem respawnSystem;
 
     public State State
     {
@@ -77,22 +78,29 @@ public class PlayerController : MonoBehaviour
     private void Subscribe()
     {
         healthSystem.OnDie += OnHealthEnd;
+        respawnSystem.OnRespawnPhaseEnded += OnRespawnPhaseEnded;
     }  
     
     private void Unsubscribe()
     {
         healthSystem.OnDie -= OnHealthEnd;
+        respawnSystem.OnRespawnPhaseEnded -= OnRespawnPhaseEnded;
     }
 
     private void OnHealthEnd()
     {
-        _signalBus.Fire<LoseSignal>();
+        _signalBus.Fire<PlayerDieSignal>();
     }
 
-    public void SetDefault()
+    private void OnRespawnPhaseEnded(RespawnPhaseEnded phaseEnded)
     {
-        playerMoveSystem.SetDefaultPosition();
+        _signalBus.Fire(new PlayerRespawnPhaseEndedSignal(phaseEnded));
+    }
+
+    public void Respawn()
+    {
         Relive();
+        respawnSystem.BeginRespawn(State == State.Die);
     }
 
     public void Relive()

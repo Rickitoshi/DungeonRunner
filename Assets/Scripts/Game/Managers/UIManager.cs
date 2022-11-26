@@ -1,4 +1,5 @@
 using System;
+using Game.Systems;
 using Signals;
 using Zenject;
 
@@ -37,28 +38,32 @@ public class UIManager: IInitializable, IDisposable
 
     private void Subscribe()
     {
-        _signalBus.Subscribe<MenuSignal>(OnMenu);
+        _signalBus.Subscribe<BackToMenuSignal>(OnMenu);
+        _signalBus.Subscribe<BackToLobbySignal>(OnGame);
         _signalBus.Subscribe<PauseSignal>(OnPause);
         _signalBus.Subscribe<PlaySignal>(OnGame);
-        _signalBus.Subscribe<LoseSignal>(OnLose);
-        _signalBus.Subscribe<CoinsAddSignal>(AddCoins);
+        _signalBus.Subscribe<PlayerDieSignal>(OnLose);
+        _signalBus.Subscribe<CoinsPickUpSignal>(AddCoins);
         _signalBus.Subscribe<ReliveSignal>(OnGame);
         _signalBus.Subscribe<MarketSignal>(OnMarket);
         _signalBus.Subscribe<MagnetSignal>(OnMagnet);
+        _signalBus.Subscribe<PlayerRespawnPhaseEndedSignal>(PlayerRespawnPhaseEnded);
     }
 
     private void Unsubscribe()
     {
-        _signalBus.Unsubscribe<MenuSignal>(OnMenu);
+        _signalBus.Unsubscribe<BackToMenuSignal>(OnMenu);
+        _signalBus.Unsubscribe<BackToLobbySignal>(OnGame);
         _signalBus.Unsubscribe<PauseSignal>(OnPause);
         _signalBus.Unsubscribe<PlaySignal>(OnGame);
-        _signalBus.Unsubscribe<LoseSignal>(OnLose);
-        _signalBus.Unsubscribe<CoinsAddSignal>(AddCoins);
+        _signalBus.Unsubscribe<PlayerDieSignal>(OnLose);
+        _signalBus.Unsubscribe<CoinsPickUpSignal>(AddCoins);
         _signalBus.Unsubscribe<ReliveSignal>(OnGame);
         _signalBus.Unsubscribe<MarketSignal>(OnMarket);
         _signalBus.Unsubscribe<MagnetSignal>(OnMagnet);
+        _signalBus.Unsubscribe<PlayerRespawnPhaseEndedSignal>(PlayerRespawnPhaseEnded);
     }
-
+    
     private void OnMenu()
     {
         ChangePanel(_menuPanel);
@@ -73,6 +78,7 @@ public class UIManager: IInitializable, IDisposable
 
     private void OnGame()
     {
+        GameHelper.Instance.CameraState = CameraState.Run;
         ChangePanel(_gamePanel);
     }
 
@@ -86,12 +92,26 @@ public class UIManager: IInitializable, IDisposable
         ChangePanel(_losePanel);
     }
 
+    private void PlayerRespawnPhaseEnded(PlayerRespawnPhaseEndedSignal signal)
+    {
+        switch (signal.PhaseEnded)
+        {
+            case RespawnPhaseEnded.Begin:
+                OnMenu();
+                _currentPanel.SetInteractable(false);
+                break;
+            case RespawnPhaseEnded.Finish:
+                _currentPanel.SetInteractable(true);
+                break;
+        }
+    }
+
     private void OnMagnet(MagnetSignal signal)
     {
         _gamePanel.Magnet.Execute(signal.Duration);
     }
 
-    private void AddCoins(CoinsAddSignal signal)
+    private void AddCoins(CoinsPickUpSignal signal)
     {
         _alwaysOnPanel.CoinCounter.AddCoins(signal.Value);
     }

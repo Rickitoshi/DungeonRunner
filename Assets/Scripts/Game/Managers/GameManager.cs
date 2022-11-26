@@ -1,4 +1,6 @@
 using System;
+using DG.Tweening;
+using Game.Systems;
 using Signals;
 using UnityEngine;
 using Zenject;
@@ -40,38 +42,38 @@ public class GameManager: IInitializable,IDisposable
 
     private void Subscribe()
     {
-        _signalBus.Subscribe<LoseSignal>(Lose);
-        _signalBus.Subscribe<CoinsAddSignal>(AddCoins);
-        _signalBus.Subscribe<MenuSignal>(Restart);
+        _signalBus.Subscribe<PlayerDieSignal>(Lose);
+        _signalBus.Subscribe<CoinsPickUpSignal>(AddCoins);
+        _signalBus.Subscribe<BackToLobbySignal>(Restart);
         _signalBus.Subscribe<PauseSignal>(Pause);
         _signalBus.Subscribe<PlaySignal>(Play);
         _signalBus.Subscribe<ExitGameSignal>(Exit);
         _signalBus.Subscribe<AppFocusChangeSignal>(SaveData);
         _signalBus.Subscribe<ReliveSignal>(Relive);
+        _signalBus.Subscribe<PlayerRespawnPhaseEndedSignal>(PlayerRespawnPhaseEnded);
     }
     
     private void Unsubscribe()
     {
-        _signalBus.Unsubscribe<LoseSignal>(Lose);
-        _signalBus.Unsubscribe<CoinsAddSignal>(AddCoins);
-        _signalBus.Unsubscribe<MenuSignal>(Restart);
+        _signalBus.Unsubscribe<PlayerDieSignal>(Lose);
+        _signalBus.Unsubscribe<CoinsPickUpSignal>(AddCoins);
+        _signalBus.Unsubscribe<BackToLobbySignal>(Restart);
         _signalBus.Unsubscribe<PauseSignal>(Pause);
         _signalBus.Unsubscribe<PlaySignal>(Play);
         _signalBus.Unsubscribe<ExitGameSignal>(Exit);
         _signalBus.Unsubscribe<AppFocusChangeSignal>(SaveData);
         _signalBus.Unsubscribe<ReliveSignal>(Relive);
+        _signalBus.Unsubscribe<PlayerRespawnPhaseEndedSignal>(PlayerRespawnPhaseEnded);
     }
 
     private void Pause()
     {
-        Time.timeScale = 0;
+        _player.State = State.Idle;
     }
 
     private void Play()
     {
-        GameHelper.Instance.CameraState = CameraState.Run;
         _player.State = State.Run;
-        Time.timeScale = 1;
 
         var properties = new Value
         {
@@ -82,10 +84,11 @@ public class GameManager: IInitializable,IDisposable
 
     private void Restart()
     {
-        GameHelper.Instance.CameraState = CameraState.Lobby;
-        _player.SetDefault();
-        _player.State = State.Idle;
-        _roadManager.Restart();
+        if (_player.State == State.Run)
+        {
+            _player.State = State.Idle;
+        }
+        _player.Respawn();
     }
 
     private void Relive()
@@ -93,6 +96,15 @@ public class GameManager: IInitializable,IDisposable
         _player.State = State.Run;
         _player.Relive();
         Mixpanel.Track("Relive reward");
+    }
+
+    private void PlayerRespawnPhaseEnded(PlayerRespawnPhaseEndedSignal signal)
+    {
+        if (signal.PhaseEnded == RespawnPhaseEnded.Begin)
+        {
+            _player.State = State.Idle;
+            _roadManager.Restart();
+        }
     }
     
     private void Lose()
@@ -102,7 +114,7 @@ public class GameManager: IInitializable,IDisposable
         Mixpanel.Track("Player die");
     }
 
-    private void AddCoins(CoinsAddSignal signal)
+    private void AddCoins(CoinsPickUpSignal signal)
     {
         if (signal.Value < 0) return;
         

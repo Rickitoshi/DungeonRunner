@@ -18,7 +18,7 @@ namespace Game.UI.Buttons.Ads
         [ContextMenu("GetReward")]
         protected override void GetReward()
         {
-            SignalBus.Fire(new CoinsAddSignal(_coinsReward));
+            SignalBus.Fire(new CoinsPickUpSignal(_coinsReward));
         }
         
         protected override void OnAvailableChange(bool value)

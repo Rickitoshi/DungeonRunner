@@ -10,6 +10,7 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     [SerializeField] private LayerMask mask;
     
     private SignalBus _signalBus;
+    private ParticlesManager _particlesManager;
     
     private bool _isMagnetActive;
     private float _magnetDuration;
@@ -17,9 +18,10 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
     private Collider[] _colliders;
 
     [Inject]
-    private void Construct(SignalBus signalBus)
+    private void Construct(SignalBus signalBus, ParticlesManager particlesManager)
     {
         _signalBus = signalBus;
+        _particlesManager = particlesManager;
         _colliders = new Collider[3];
     }
 
@@ -48,12 +50,14 @@ public class ItemsCollector : MonoBehaviour, IItemVisitor
 
     public void ItemVisit(Coin coin)
     {
+        _particlesManager.SetPickUpItemParticle(coin.transform.position);
         coin.Deactivate();
-        _signalBus.Fire(new CoinsAddSignal(coin.Value));
+        _signalBus.Fire(new CoinsPickUpSignal(coin.Value));
     }
 
     public void ItemVisit(Magnet magnet)
     {
+        _particlesManager.SetPickUpItemParticle(magnet.transform.position);
         _magnetDuration = magnet.Duration;
         _itemMoveSpeed = magnet.MagnetizationRate;
         _signalBus.Fire(new MagnetSignal(_magnetDuration));

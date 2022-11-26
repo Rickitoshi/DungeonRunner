@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7524516854556896981}
   - component: {fileID: 8091730594775578746}
   - component: {fileID: 7965626819171689897}
+  - component: {fileID: 2073360858289607664}
   - component: {fileID: 1783932576}
   - component: {fileID: 3174775242072693847}
   - component: {fileID: 6715428105433748882}
@@ -55,6 +56,7 @@ MonoBehaviour:
   playerMoveSystem: {fileID: 7524516854556896981}
   healthSystem: {fileID: 7965626819171689897}
   animatorController: {fileID: 7988933808191106373}
+  respawnSystem: {fileID: 2073360858289607664}
 --- !u!114 &7524516854556896981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,6 +106,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1
+--- !u!114 &2073360858289607664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2605682340226441355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc3287114f34d5db8420611ad53b0e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnPoint: {fileID: 0}
+  duration: 1.5
+  decline: 1.5
+  particleOffset: {x: 0, y: -0.5, z: 0}
 --- !u!114 &1783932576
 MonoBehaviour:
   m_ObjectHideFlags: 0
