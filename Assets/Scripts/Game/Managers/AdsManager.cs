@@ -12,7 +12,6 @@ public class AdsManager: IInitializable
         IronSource.Agent.shouldTrackNetworkState(true);
         IronSource.Agent.setConsent(false);
         IronSource.Agent.init(APP_ANDROID_KEY, IronSourceAdUnits.REWARDED_VIDEO);
-        
     }
     
 }

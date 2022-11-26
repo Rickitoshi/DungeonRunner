@@ -9,7 +9,8 @@ namespace Game.Systems
     {
         [SerializeField] private Transform respawnPoint;
         [SerializeField] private float duration = 2;
-        [SerializeField] private float decline = 1;
+        [SerializeField] private float declineAlive = 1.5f;
+        [SerializeField] private float declineDead = 1.5f;
         [SerializeField] private Vector3 particleOffsetAlive;
         [SerializeField] private Vector3 particleOffsetDead;
 
@@ -21,17 +22,17 @@ namespace Game.Systems
         {
             var point = transform.position;
             _particlesManager.SetSpawnParticle(point, isDead ?particleOffsetDead  : particleOffsetAlive);
-            transform.DOMoveY(point.y - decline, duration).OnComplete(() =>
+            transform.DOMoveY(point.y - (isDead?declineDead:declineAlive), duration).OnComplete(() =>
             {
                 OnRespawnPhaseEnded?.Invoke(RespawnPhaseEnded.Begin);
                 FinishRespawn();
             });
         }
 
-        private void FinishRespawn()
+        private void FinishRespawn(bool isDead = false)
         {
             var point = respawnPoint.position;
-            transform.position = new Vector3(point.x, point.y - decline, point.z);
+            transform.position = new Vector3(point.x, point.y - (isDead ? declineDead : declineAlive), point.z);
             _particlesManager.SetSpawnParticle(point, particleOffsetAlive);
             transform.DOMoveY(point.y, duration).OnComplete(() =>
             {

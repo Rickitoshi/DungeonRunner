@@ -121,7 +121,8 @@ MonoBehaviour:
   respawnPoint: {fileID: 0}
   duration: 1.5
   decline: 1.5
-  particleOffset: {x: 0, y: -0.5, z: 0}
+  particleOffsetAlive: {x: 0, y: -0.5, z: 0}
+  particleOffsetDead: {x: 0, y: -0.5, z: -0.5}
 --- !u!114 &1783932576
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ public class UIManager: IInitializable, IDisposable
     
     [Inject] private SignalBus _signalBus;
     [Inject] private SaveManager _saveManager;
-
+    
     private BasePanel _currentPanel;
 
     public void Initialize()
