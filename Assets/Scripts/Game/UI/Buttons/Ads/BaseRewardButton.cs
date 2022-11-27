@@ -8,7 +8,7 @@ namespace Game.UI.Buttons.Ads
         protected override void Start()
         {
             base.Start();
-            SetInteractable(false);
+            OnAvailableChange(IronSource.Agent.isRewardedVideoAvailable());
         }
 
         protected override void Subscribe()

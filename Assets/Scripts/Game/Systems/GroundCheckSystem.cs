@@ -4,7 +4,8 @@ namespace Game.Systems
 {
     public class GroundCheckSystem : MonoBehaviour
     {
-        [SerializeField] private float rayCastDistance = 0.5f;
+        private const float MAX_DISTANCE = 1f;
+        
         [SerializeField] private float groundDistance = 0.3f;
         [SerializeField] private LayerMask layerMask;
 
@@ -14,7 +15,7 @@ namespace Game.Systems
         {
             var position = transform.position;
             Ray ray = new Ray(position, Vector3.down);
-            if (Physics.Raycast(ray, out RaycastHit hit, rayCastDistance,layerMask.value))
+            if (Physics.Raycast(ray, out RaycastHit hit, MAX_DISTANCE,layerMask.value))
             {
                 var hitPosition = hit.point;
                 IsGrounded = Vector3.SqrMagnitude(position - hitPosition) <= groundDistance;

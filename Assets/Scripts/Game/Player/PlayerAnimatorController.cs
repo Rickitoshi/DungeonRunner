@@ -31,4 +31,9 @@ public class PlayerAnimatorController : MonoBehaviour
     {
         _animator.SetTrigger(Die);
     }
+
+    public void SetActive(bool value)
+    {
+        _animator.speed = value ? 1 : 0;
+    }
 }

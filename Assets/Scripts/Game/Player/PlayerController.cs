@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
                     _stateManager.ChangeState(_runState);
                     break;
                 case State.Die:
-                    _stateManager.ChangeState(_failState);
+                    _stateManager.ChangeState(_deadState);
                     break;
             }
         }
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private State _currentState;
     private RunState _runState;
     private IdleState _idleState;
-    private FailState _failState;
+    private DeadState _deadState;
 
     [Inject]
     private void Construct(InputHandler inputHandler,SignalBus signalBus)
@@ -56,8 +56,8 @@ public class PlayerController : MonoBehaviour
         
         _stateManager = new StateManager();
         _runState = new RunState(playerMoveSystem, animatorController, _inputHandler);
-        _idleState = new IdleState(animatorController);
-        _failState = new FailState(animatorController);
+        _idleState = new IdleState(playerMoveSystem, animatorController);
+        _deadState = new DeadState(playerMoveSystem, animatorController);
     }
 
     private void OnDestroy()
@@ -99,7 +99,8 @@ public class PlayerController : MonoBehaviour
 
     public void Respawn()
     {
-        Relive();
+        healthSystem.Reset();
+        playerMoveSystem.ResetBehaviour();
         respawnSystem.BeginRespawn(State == State.Die);
     }
 

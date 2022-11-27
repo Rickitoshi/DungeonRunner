@@ -1,15 +1,15 @@
-using DG.Tweening;
 using Game.Systems;
+using UnityEngine;
 
-public class IdleState: BasePlayerState
+public class DeadState: BasePlayerState
 {
-    public IdleState(PlayerMoveSystem moveSystem, PlayerAnimatorController animator) : base(moveSystem, animator)
+    public DeadState(PlayerMoveSystem moveSystem, PlayerAnimatorController animator) : base(moveSystem, animator)
     {
     }
-    
+
     public override void Enter()
     {
-        Animator.SetIdle();
+        Animator.SetDie();
         MoveSystem.IsActive = false;
     }
 

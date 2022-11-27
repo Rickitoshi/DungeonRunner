@@ -3,28 +3,24 @@ using Game.Systems;
 using UnityEngine;
 
 
-public class RunState : PlayerState
+public class RunState : BasePlayerState
 {
     private readonly InputHandler _inputHandler;
-    private readonly PlayerMoveSystem _moveSystem;
-    
-    public RunState(PlayerMoveSystem moveSystem, PlayerAnimatorController animator, InputHandler inputHandler) : base(animator)
+
+    public RunState(PlayerMoveSystem moveSystem, PlayerAnimatorController animator, InputHandler inputHandler) : base(moveSystem, animator)
     {
         _inputHandler = inputHandler;
-        _moveSystem = moveSystem;
     }
     
     public override void Enter()
     {
-        _animator.SetRun();
-        _moveSystem.IsActive = true;
-        DOTween.Play(_moveSystem.gameObject.transform);
+        Animator.SetRun();
+        MoveSystem.IsActive = true;
     }
 
     public override void Exit()
     {
-        _moveSystem.IsActive = false;
-        DOTween.Pause(_moveSystem.gameObject.transform);
+      
     }
 
     public override void Update()
@@ -33,44 +29,44 @@ public class RunState : PlayerState
         
         if (Input.GetKeyDown(KeyCode.D))
         {
-            _moveSystem.SwitchSide(StrafeDirection.Right);
+            MoveSystem.SwitchSide(StrafeDirection.Right);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            _moveSystem.SwitchSide(StrafeDirection.Left);
+            MoveSystem.SwitchSide(StrafeDirection.Left);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && _moveSystem.IsGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && MoveSystem.IsGrounded)
         {
-            _moveSystem.Jump();
+            MoveSystem.Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_moveSystem.IsGrounded)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !MoveSystem.IsGrounded)
         {
-            _moveSystem.Fall();
+            MoveSystem.Fall();
         }
         
 #elif UNITY_ANDROID
 
         if (_inputHandler.RightSwipe)
         {
-            _moveSystem.SwitchSide(StrafeDirection.Right);
+            MoveSystem.SwitchSide(StrafeDirection.Right);
         }
 
         if (_inputHandler.LeftSwipe)
         {
-            _moveSystem.SwitchSide(StrafeDirection.Left);
+            MoveSystem.SwitchSide(StrafeDirection.Left);
         }
 
-        if (_inputHandler.UpSwipe && _moveSystem.IsGrounded)
+        if (_inputHandler.UpSwipe && MoveSystem.IsGrounded)
         {
-            _moveSystem.Jump();
+            MoveSystem.Jump();
         }
 
-        if (_inputHandler.DownSwipe && !_moveSystem.IsGrounded)
+        if (_inputHandler.DownSwipe && !MoveSystem.IsGrounded)
         {
-            _moveSystem.Fall();
+            MoveSystem.Fall();
         }
 
 #endif
@@ -78,6 +74,6 @@ public class RunState : PlayerState
 
     public override void  FixedUpdate()
     {
-        _moveSystem.MoveForward();
+        MoveSystem.MoveForward();
     }
 }

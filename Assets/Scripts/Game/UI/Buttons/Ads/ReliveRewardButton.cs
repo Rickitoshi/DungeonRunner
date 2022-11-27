@@ -9,8 +9,6 @@ namespace Game.UI.Buttons.Ads
         
         protected override void OnClick()
         {
-            _isRewarded = true;
-            SetInteractable(false);
             IronSource.Agent.showRewardedVideo(AdsManager.RELIVE_REWRD);
         }
 
@@ -50,6 +48,8 @@ namespace Game.UI.Buttons.Ads
             if (placement.getPlacementName() == AdsManager.RELIVE_REWRD)
             {
                 GetReward();
+                _isRewarded = true;
+                SetInteractable(false);
             }
         }
     }

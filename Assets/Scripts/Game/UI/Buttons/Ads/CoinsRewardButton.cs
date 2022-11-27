@@ -23,16 +23,16 @@ namespace Game.UI.Buttons.Ads
         
         protected override void OnAvailableChange(bool value)
         {
-            if (value)
+            if (!value)
             {
-                _coinsReward = IronSource.Agent.getPlacementInfo(AdsManager.COINS_REWARD).getRewardAmount();
-                textMesh.text = $"+{_coinsReward}";
+                SetInteractable(false);
+                return;
             }
-            else
-            {
-                textMesh.text ="-----";
-            }
-            SetInteractable(value);
+            
+            _coinsReward = IronSource.Agent.getPlacementInfo(AdsManager.COINS_REWARD).getRewardAmount();
+            textMesh.text = $"+{_coinsReward}";
+
+            SetInteractable(!IronSource.Agent.isRewardedVideoPlacementCapped(AdsManager.COINS_REWARD));
         }
         
         protected override void OnRewardVideoFinish(IronSourcePlacement placement, IronSourceAdInfo info)

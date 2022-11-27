@@ -16,22 +16,36 @@ namespace Game.Systems
         [Space(10f)]
         [SerializeField] private float gravityValue = -9.81f;
 
-        public bool IsActive;
+        public bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                if (value == _isActive) return;
+
+                _isActive = value;
+                if (_isActive)
+                {
+                    DOTween.Play(transform);
+                }
+                else
+                {
+                    DOTween.Pause(transform);
+                }
+            }
+        }
+
         public bool IsGrounded => _groundCheckSystem.IsGrounded;
         
         private GroundCheckSystem _groundCheckSystem;
         private Vector3 _startPosition;
         private float _targetPositionX;
         private Vector3 _velocity;
+        private bool _isActive;
 
         private void Awake()
         {
             _groundCheckSystem = GetComponent<GroundCheckSystem>();
-        }
-
-        private void Start()
-        {
-            _startPosition = transform.position;
         }
 
         private void FixedUpdate()
@@ -91,9 +105,8 @@ namespace Game.Systems
             if (!_groundCheckSystem.IsGrounded) _velocity.y += gravityValue * fallForceMultiplier;
         }
 
-        public void SetDefaultPosition()
+        public void ResetBehaviour()
         {
-            transform.position = _startPosition;
             DOTween.Kill(transform);
             _targetPositionX = 0;
         }

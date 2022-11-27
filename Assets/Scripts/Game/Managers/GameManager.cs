@@ -68,11 +68,13 @@ public class GameManager: IInitializable,IDisposable
 
     private void Pause()
     {
-        _player.State = State.Idle;
+        Time.timeScale = 0;
     }
 
     private void Play()
     {
+        Time.timeScale = 1;
+        
         _player.State = State.Run;
 
         var properties = new Value
@@ -84,10 +86,13 @@ public class GameManager: IInitializable,IDisposable
 
     private void Restart()
     {
+        Time.timeScale = 1;
+        
         if (_player.State == State.Run)
         {
             _player.State = State.Idle;
         }
+        
         _player.Respawn();
     }
 
