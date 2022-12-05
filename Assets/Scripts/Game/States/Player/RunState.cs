@@ -6,49 +6,28 @@ using UnityEngine;
 public class RunState : BasePlayerState
 {
     private readonly InputHandler _inputHandler;
+    private readonly ParticlesManager _particlesManager;
 
-    public RunState(PlayerMoveSystem moveSystem, PlayerAnimatorController animator, InputHandler inputHandler) : base(moveSystem, animator)
+    public RunState(PlayerMoveSystem moveSystem, PlayerAnimatorController animator, InputHandler inputHandler,ParticlesManager particlesManager) : base(moveSystem, animator)
     {
         _inputHandler = inputHandler;
+        _particlesManager = particlesManager;
     }
     
     public override void Enter()
     {
         Animator.SetRun();
+        _particlesManager.SetActiveRunParticle(true);
         MoveSystem.IsActive = true;
     }
 
     public override void Exit()
     {
-      
+        _particlesManager.SetActiveRunParticle(false);
     }
 
     public override void Update()
     {
-#if UNITY_EDITOR
-        
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            MoveSystem.SwitchSide(StrafeDirection.Right);
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            MoveSystem.SwitchSide(StrafeDirection.Left);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && MoveSystem.IsGrounded)
-        {
-            MoveSystem.Jump();
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !MoveSystem.IsGrounded)
-        {
-            MoveSystem.Fall();
-        }
-        
-#elif UNITY_ANDROID
-
         if (_inputHandler.RightSwipe)
         {
             MoveSystem.SwitchSide(StrafeDirection.Right);
@@ -68,12 +47,11 @@ public class RunState : BasePlayerState
         {
             MoveSystem.Fall();
         }
-
-#endif
     }
 
     public override void  FixedUpdate()
     {
         MoveSystem.MoveForward();
+        _particlesManager.SetActiveRunParticle(MoveSystem.IsGrounded);
     }
 }

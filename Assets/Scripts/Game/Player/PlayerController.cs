@@ -1,3 +1,4 @@
+using System;
 using Game.Systems;
 using Signals;
 using UnityEngine;
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
     
     private InputHandler _inputHandler;
     private SignalBus _signalBus;
+    private ParticlesManager _particlesManager;
     
     private StateManager _stateManager;
     private State _currentState;
@@ -44,10 +46,11 @@ public class PlayerController : MonoBehaviour
     private DeadState _deadState;
 
     [Inject]
-    private void Construct(InputHandler inputHandler,SignalBus signalBus)
+    private void Construct(InputHandler inputHandler,SignalBus signalBus,ParticlesManager particlesManager)
     {
         _inputHandler = inputHandler;
         _signalBus = signalBus;
+        _particlesManager = particlesManager;
     }
     
     private void Awake()
@@ -55,9 +58,14 @@ public class PlayerController : MonoBehaviour
         Subscribe();
         
         _stateManager = new StateManager();
-        _runState = new RunState(playerMoveSystem, animatorController, _inputHandler);
+        _runState = new RunState(playerMoveSystem, animatorController, _inputHandler,_particlesManager);
         _idleState = new IdleState(playerMoveSystem, animatorController);
         _deadState = new DeadState(playerMoveSystem, animatorController);
+    }
+
+    private void Start()
+    {
+        _particlesManager.GetRunParticle(transform);
     }
 
     private void OnDestroy()
@@ -101,7 +109,16 @@ public class PlayerController : MonoBehaviour
     {
         healthSystem.Reset();
         playerMoveSystem.ResetBehaviour();
-        respawnSystem.BeginRespawn(State == State.Die);
+        
+        if (State == State.Die)
+        {
+            respawnSystem.BeginRespawn();
+        }
+        else
+        {
+            respawnSystem.InstantRespawn();
+        }
+       
     }
 
     public void Relive()

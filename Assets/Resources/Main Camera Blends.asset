@@ -57,7 +57,7 @@ MonoBehaviour:
     m_To: CM Market Camera
     m_Blend:
       m_Style: 1
-      m_Time: 1.25
+      m_Time: 0.8
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -68,7 +68,7 @@ MonoBehaviour:
     m_To: CM Lobby Camera
     m_Blend:
       m_Style: 1
-      m_Time: 1.25
+      m_Time: 0.8
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []

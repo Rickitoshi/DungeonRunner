@@ -872,6 +872,10 @@ PrefabInstance:
       propertyPath: respawnPoint
       value: 
       objectReference: {fileID: 929923182}
+    - target: {fileID: 2073360858289607664, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
+      propertyPath: particleOffsetDead.y
+      value: -0.48
+      objectReference: {fileID: 0}
     - target: {fileID: 2605682340226441355, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
       propertyPath: m_Name
       value: Player
@@ -919,6 +923,10 @@ PrefabInstance:
     - target: {fileID: 2605682340226441356, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7524516854556896981, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
+      propertyPath: useParticle
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
@@ -3752,7 +3760,7 @@ MonoBehaviour:
   - {fileID: 1174497988765644530, guid: 77c99f118bccfb042816ecd2470f5cd9, type: 3}
   - {fileID: 1285076322601189536, guid: 76594101030196f42b93cdeecf2af2ed, type: 3}
   - {fileID: 1285076322601189536, guid: 76594101030196f42b93cdeecf2af2ed, type: 3}
-  startParts: 2
+  playParts: 2
   roadPartLenght: 37
 --- !u!4 &1076015504
 Transform:
@@ -5424,6 +5432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnParticle: {fileID: 19800002, guid: 3d4907e6bd39f474b8fd8220920e65c4, type: 3}
   pickUpItem: {fileID: 19800018, guid: a40b64bf23366dc42a892af2c6ff6140, type: 3}
+  runParticle: {fileID: 7013720775017239594, guid: 1cbf349e7055e5e4eb1b207addb29a93, type: 3}
 --- !u!4 &2040362685
 Transform:
   m_ObjectHideFlags: 0

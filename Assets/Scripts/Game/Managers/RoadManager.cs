@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class RoadManager : MonoBehaviour
 {
     [SerializeField] private RoadPart[] roadPartsPool;
-    [SerializeField] private int startParts = 2;
+    [SerializeField] private int playParts = 2;
     [SerializeField] private float roadPartLenght = 37f;
 
     private Queue<RoadPart> _currentRoad;
@@ -40,7 +40,7 @@ public class RoadManager : MonoBehaviour
 
     private void InitializeRoad()
     {
-        for (int i = 0; i < startParts; i++)
+        for (int i = 0; i < playParts; i++)
         {
             GetPart();
         }

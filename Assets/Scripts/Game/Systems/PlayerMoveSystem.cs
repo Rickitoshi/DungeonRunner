@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using DG.Tweening;
+using Zenject;
 
 namespace Game.Systems
 {
@@ -36,7 +38,7 @@ namespace Game.Systems
         }
 
         public bool IsGrounded => _groundCheckSystem.IsGrounded;
-        
+
         private GroundCheckSystem _groundCheckSystem;
         private Vector3 _startPosition;
         private float _targetPositionX;
@@ -50,10 +52,8 @@ namespace Game.Systems
 
         private void FixedUpdate()
         {
-            if(!IsActive) return;
-            
-            CheckGround();
             Gravity();
+            CheckGround();
         }
         
         private void CheckGround()

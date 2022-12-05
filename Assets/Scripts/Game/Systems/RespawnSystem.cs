@@ -18,21 +18,28 @@ namespace Game.Systems
 
         public event Action<RespawnPhaseEnded> OnRespawnPhaseEnded;
 
-        public void BeginRespawn(bool isDead = false)
+        public void InstantRespawn()
+        {
+            transform.position = respawnPoint.position;
+            OnRespawnPhaseEnded?.Invoke(RespawnPhaseEnded.Begin);
+            OnRespawnPhaseEnded?.Invoke(RespawnPhaseEnded.Finish);
+        }
+        
+        public void BeginRespawn()
         {
             var point = transform.position;
-            _particlesManager.SetSpawnParticle(point, isDead ?particleOffsetDead  : particleOffsetAlive);
-            transform.DOMoveY(point.y - (isDead?declineDead:declineAlive), duration).OnComplete(() =>
+            _particlesManager.SetSpawnParticle(point, particleOffsetDead);
+            transform.DOMoveY(point.y - declineDead, duration).OnComplete(() =>
             {
                 OnRespawnPhaseEnded?.Invoke(RespawnPhaseEnded.Begin);
                 FinishRespawn();
             });
         }
 
-        private void FinishRespawn(bool isDead = false)
+        private void FinishRespawn()
         {
             var point = respawnPoint.position;
-            transform.position = new Vector3(point.x, point.y - (isDead ? declineDead : declineAlive), point.z);
+            transform.position = new Vector3(point.x, point.y - declineAlive, point.z);
             _particlesManager.SetSpawnParticle(point, particleOffsetAlive);
             transform.DOMoveY(point.y, duration).OnComplete(() =>
             {
