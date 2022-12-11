@@ -6,16 +6,10 @@ namespace Game.Systems
 {
     public class HealthSystem : MonoBehaviour,IObstacleVisitor
     {
-        [SerializeField, Min(1)] private int maxHealth = 1;
-
         public event Action OnDie;
 
+        private int _maxHealth;
         private int _currentHealth;
-        
-        private void Start()
-        {
-            Reset();
-        }
         
         private void GetDamage(int value)
         {
@@ -39,9 +33,15 @@ namespace Game.Systems
             if (_currentHealth > 0) GetDamage(damage);
         }
 
+        public void Initialize(int maxHealth)
+        {
+            _maxHealth = maxHealth;
+            Reset();
+        }
+        
         public void Reset()
         {
-            _currentHealth = maxHealth;
+            _currentHealth = _maxHealth;
         }
     }
 }

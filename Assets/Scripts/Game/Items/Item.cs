@@ -1,4 +1,5 @@
 using System;
+using Game.Systems;
 using UnityEngine;
 
 public abstract class Item : MonoBehaviour, IItemMagnetVisitor
@@ -6,16 +7,16 @@ public abstract class Item : MonoBehaviour, IItemMagnetVisitor
     public bool IsActive => gameObject.activeSelf;
     public bool IsMagnetized { get; private set; }
     
-    private ItemsCollector _target;
+    private MagnetSystem _target;
     private float _moveSpeed;
     private Vector3 _defaultPosition;
     
-    public void MagnetVisit(ItemsCollector collector,float moveSpeed)
+    public void MagnetVisit(MagnetSystem magnet,float moveSpeed)
     {
         if (!IsMagnetized)
         {
             IsMagnetized = true;
-            _target = collector;
+            _target = magnet;
             _moveSpeed = moveSpeed;
             _defaultPosition = transform.localPosition;
         }

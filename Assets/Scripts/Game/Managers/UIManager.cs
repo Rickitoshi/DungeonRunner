@@ -1,4 +1,5 @@
 using System;
+using Game.Player;
 using Game.Systems;
 using Signals;
 using Zenject;
@@ -14,6 +15,7 @@ public class UIManager: IInitializable, IDisposable
     
     [Inject] private SignalBus _signalBus;
     [Inject] private SaveManager _saveManager;
+    [Inject] private PlayerConfig _playerConfig;
     
     private BasePanel _currentPanel;
 
@@ -112,9 +114,9 @@ public class UIManager: IInitializable, IDisposable
         }
     }
 
-    private void OnMagnet(MagnetSignal signal)
+    private void OnMagnet()
     {
-        _gamePanel.Magnet.Start(signal.Duration);
+        _gamePanel.Magnet.Start(_playerConfig.MagnetDuration);
     }
 
     private void AddCoins(CoinsPickUpSignal signal)

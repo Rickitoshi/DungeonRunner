@@ -1,4 +1,6 @@
+using Game.Systems;
+
 public interface IItemMagnetVisitor
 {
-    public void MagnetVisit(ItemsCollector collector, float moveSpeed);
+    public void MagnetVisit(MagnetSystem magnet, float moveSpeed);
 }

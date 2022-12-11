@@ -924,6 +924,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2605682340226441360, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: dfe66d7640232e24180afa54bffa5b5d, type: 2}
     - target: {fileID: 7524516854556896981, guid: c3956f654df462643b8edfae4fe58e32, type: 3}
       propertyPath: useParticle
       value: 1
@@ -1354,7 +1358,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.2795455, y: 1}
+    m_SensorSize: {x: 2.2899544, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2575,7 +2579,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.2795455, y: 1}
+    m_SensorSize: {x: 2.2899544, y: 1}
   m_Transitions:
     m_BlendHint: 2
     m_InheritPosition: 0
@@ -4375,7 +4379,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.2795455, y: 1}
+    m_SensorSize: {x: 2.2899544, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -5496,6 +5500,14 @@ PrefabInstance:
     - target: {fileID: 3168951649880816719, guid: 6ed016cdf0bb8004a8e7965a6783c2df, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3168951649880816719, guid: 6ed016cdf0bb8004a8e7965a6783c2df, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.5546875
+      objectReference: {fileID: 0}
+    - target: {fileID: 3168951649880816719, guid: 6ed016cdf0bb8004a8e7965a6783c2df, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.27398682
       objectReference: {fileID: 0}
     - target: {fileID: 3168951650059322948, guid: 6ed016cdf0bb8004a8e7965a6783c2df, type: 3}
       propertyPath: m_Name

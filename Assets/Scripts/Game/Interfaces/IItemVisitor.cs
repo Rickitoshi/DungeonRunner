@@ -1,5 +1,5 @@
 public interface IItemVisitor
 {
-        public void ItemVisit(Coin coin);
-        public void ItemVisit(Magnet magnet);
+        public void ItemVisit(CoinItem coinItem);
+        public void ItemVisit(MagnetItem magnetItem);
 }

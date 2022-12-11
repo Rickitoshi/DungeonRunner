@@ -1,14 +1,15 @@
-using System;
+using Game.Player;
 using Game.Systems;
 using Signals;
 using UnityEngine;
 using Zenject;
 
-[RequireComponent(typeof(HealthSystem),typeof(RespawnSystem))]
+[RequireComponent(typeof(HealthSystem),typeof(RespawnSystem),typeof(ItemsCollector))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerMoveSystem playerMoveSystem;
     [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private MagnetSystem magnetSystem;
     [SerializeField] private PlayerAnimatorController animatorController;
     [SerializeField] private RespawnSystem respawnSystem;
 
@@ -38,7 +39,8 @@ public class PlayerController : MonoBehaviour
     private InputHandler _inputHandler;
     private SignalBus _signalBus;
     private ParticlesManager _particlesManager;
-    
+    private PlayerConfig _config;
+
     private StateManager _stateManager;
     private State _currentState;
     private RunState _runState;
@@ -46,11 +48,12 @@ public class PlayerController : MonoBehaviour
     private DeadState _deadState;
 
     [Inject]
-    private void Construct(InputHandler inputHandler,SignalBus signalBus,ParticlesManager particlesManager)
+    private void Construct(InputHandler inputHandler,SignalBus signalBus,ParticlesManager particlesManager,PlayerConfig config)
     {
         _inputHandler = inputHandler;
         _signalBus = signalBus;
         _particlesManager = particlesManager;
+        _config = config;
     }
     
     private void Awake()
@@ -66,6 +69,10 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _particlesManager.GetRunParticle(transform);
+        
+        playerMoveSystem.Initialize(_config.MoveSpeed,_config.StrafeDuration,_config.StrafeDistance,_config.JumpHeight);
+        healthSystem.Initialize(_config.MaxHealth);
+        magnetSystem.Initialize(_config.MagnetDuration);
     }
 
     private void OnDestroy()
@@ -87,16 +94,31 @@ public class PlayerController : MonoBehaviour
     {
         healthSystem.OnDie += OnHealthEnd;
         respawnSystem.OnRespawnPhaseEnded += OnRespawnPhaseEnded;
+        _signalBus.Subscribe<MagnetSignal>(ActivateMagnet);
+        _signalBus.Subscribe<BackToLobbySignal>(DeactivateMagnet);
     }  
     
     private void Unsubscribe()
     {
         healthSystem.OnDie -= OnHealthEnd;
         respawnSystem.OnRespawnPhaseEnded -= OnRespawnPhaseEnded;
+        _signalBus.Unsubscribe<MagnetSignal>(ActivateMagnet);
+        _signalBus.Unsubscribe<BackToLobbySignal>(DeactivateMagnet);
     }
 
+    private void ActivateMagnet()
+    {
+        magnetSystem.StartMagnetize();
+    }
+
+    private void DeactivateMagnet()
+    {
+        magnetSystem.StopMagnetize();
+    }
+    
     private void OnHealthEnd()
     {
+        DeactivateMagnet();
         _signalBus.Fire<PlayerDieSignal>();
     }
 

@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +8,8 @@ namespace Game.UI.Common
     {
         [SerializeField] private Image image;
 
+        private Tween _tween;
+        
         private void Start()
         {
             image.fillAmount = 0;
@@ -18,13 +19,12 @@ namespace Game.UI.Common
         {
             DOTween.Rewind(gameObject);
             image.fillAmount = 1;
-            DOTween.To(v => { image.fillAmount = v; }, image.fillAmount, 0, duration);
+           _tween = DOTween.To(v => { image.fillAmount = v; }, image.fillAmount, 0, duration);
         }
 
         public void Stop()
         {
-            DOTween.Rewind(gameObject);
-            image.fillAmount = 0;
+            _tween.Kill(true);
         }
     }
 }
