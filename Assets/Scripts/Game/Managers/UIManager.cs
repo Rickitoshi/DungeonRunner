@@ -39,7 +39,7 @@ public class UIManager: IInitializable, IDisposable
     private void Subscribe()
     {
         _signalBus.Subscribe<BackToMenuSignal>(OnMenu);
-        _signalBus.Subscribe<BackToLobbySignal>(OnGame);
+        _signalBus.Subscribe<BackToLobbySignal>(OnLobby);
         _signalBus.Subscribe<PauseSignal>(OnPause);
         _signalBus.Subscribe<PlaySignal>(OnGame);
         _signalBus.Subscribe<PlayerDieSignal>(OnLose);
@@ -53,7 +53,7 @@ public class UIManager: IInitializable, IDisposable
     private void Unsubscribe()
     {
         _signalBus.Unsubscribe<BackToMenuSignal>(OnMenu);
-        _signalBus.Unsubscribe<BackToLobbySignal>(OnGame);
+        _signalBus.Unsubscribe<BackToLobbySignal>(OnLobby);
         _signalBus.Unsubscribe<PauseSignal>(OnPause);
         _signalBus.Unsubscribe<PlaySignal>(OnGame);
         _signalBus.Unsubscribe<PlayerDieSignal>(OnLose);
@@ -70,6 +70,12 @@ public class UIManager: IInitializable, IDisposable
         GameHelper.Instance.CameraState = CameraState.Lobby;
     }
 
+    private void OnLobby()
+    {
+        _gamePanel.Magnet.Stop();
+        _currentPanel.Deactivate();
+    }
+
     private void OnMarket()
     {
         ChangePanel(_marketPanel);
@@ -78,8 +84,8 @@ public class UIManager: IInitializable, IDisposable
 
     private void OnGame()
     {
-        GameHelper.Instance.CameraState = CameraState.Run;
         ChangePanel(_gamePanel);
+        GameHelper.Instance.CameraState = CameraState.Run;
     }
 
     private void OnPause()
@@ -108,7 +114,7 @@ public class UIManager: IInitializable, IDisposable
 
     private void OnMagnet(MagnetSignal signal)
     {
-        _gamePanel.Magnet.Execute(signal.Duration);
+        _gamePanel.Magnet.Start(signal.Duration);
     }
 
     private void AddCoins(CoinsPickUpSignal signal)

@@ -14,11 +14,17 @@ namespace Game.UI.Common
             image.fillAmount = 0;
         }
 
-        public void Execute(float duration)
+        public void Start(float duration)
         {
             DOTween.Rewind(gameObject);
             image.fillAmount = 1;
             DOTween.To(v => { image.fillAmount = v; }, image.fillAmount, 0, duration);
+        }
+
+        public void Stop()
+        {
+            DOTween.Rewind(gameObject);
+            image.fillAmount = 0;
         }
     }
 }
