@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectSettings: {fileID: 11400000, guid: 30a06a893725eb84dbd1f4ea7cd854fa, type: 2}
   playerConfig: {fileID: 11400000, guid: dfe66d7640232e24180afa54bffa5b5d, type: 2}
+  panelAnimationConfig: {fileID: 11400000, guid: 12e2f20f40391344d80cfd37b245001d, type: 2}

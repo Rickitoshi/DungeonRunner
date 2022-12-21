@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using Game.UI.Panels;
 
-public class LosePanel : BasePanel
+public class LosePanel : BasePopUpPanel
 {
 }

@@ -1,7 +1,5 @@
-using System;
-using UnityEngine;
-using UnityEngine.UI;
+using Game.UI.Panels;
 
-public class PausePanel : BasePanel
+public class PausePanel : BasePopUpPanel
 {
 }

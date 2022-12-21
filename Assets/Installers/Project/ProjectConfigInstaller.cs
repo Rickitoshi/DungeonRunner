@@ -1,4 +1,5 @@
 using Game.Player;
+using Game.UI.Common;
 using UnityEngine;
 using Zenject;
 
@@ -7,10 +8,12 @@ public class ProjectConfigInstaller : ScriptableObjectInstaller<ProjectConfigIns
 {
     [SerializeField] private ProjectSettings projectSettings;
     [SerializeField] private PlayerConfig playerConfig;
+    [SerializeField] private PanelAnimationConfig panelAnimationConfig;
     
     public override void InstallBindings()
     {
         Container.BindInstance(projectSettings);
         Container.BindInstance(playerConfig);
+        Container.BindInstance(panelAnimationConfig);
     }
 }

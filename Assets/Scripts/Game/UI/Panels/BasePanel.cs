@@ -1,30 +1,32 @@
 using UnityEngine;
 using DG.Tweening;
+using Game.UI.Common;
 
 [RequireComponent(typeof(CanvasGroup))]
 public abstract class BasePanel : MonoBehaviour
 {
     private CanvasGroup _canvasGroup;
+    private float _alphaDuration;
 
-    private void Awake()
+    public virtual void Initialize(PanelAnimationConfig config)
     {
         _canvasGroup = GetComponent<CanvasGroup>();
-    }
 
-    public void Initialize()
-    {
+        _alphaDuration = config.PanelDurationAlpha;
+        
         gameObject.SetActive(false);
+        _canvasGroup.alpha = 0;
     }
     
-    public void Activate()
+    public virtual void Activate()
     {
         gameObject.SetActive(true);
-        _canvasGroup.DOFade(1, 0.1f).SetUpdate(true);
+        _canvasGroup.DOFade(1, _alphaDuration).SetUpdate(true);
     }
     
-    public void Deactivate()
+    public virtual void Deactivate()
     {
-        _canvasGroup.DOFade(0, 0.1f).SetUpdate(true).OnComplete(() => { gameObject.SetActive(false); });
+        _canvasGroup.DOFade(0, _alphaDuration).SetUpdate(true).OnComplete(() => { gameObject.SetActive(false); });
     }
 
     public void SetInteractable(bool value)

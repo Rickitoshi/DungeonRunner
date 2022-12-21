@@ -1,6 +1,7 @@
 using System;
 using Game.Player;
 using Game.Systems;
+using Game.UI.Common;
 using Signals;
 using Zenject;
 
@@ -16,6 +17,7 @@ public class UIManager: IInitializable, IDisposable
     [Inject] private SignalBus _signalBus;
     [Inject] private SaveManager _saveManager;
     [Inject] private PlayerConfig _playerConfig;
+    [Inject] private PanelAnimationConfig _panelAnimationConfig;
     
     private BasePanel _currentPanel;
 
@@ -23,11 +25,11 @@ public class UIManager: IInitializable, IDisposable
     {
         _alwaysOnPanel.CoinCounter.Initialize(_saveManager.Data.Coins);
 
-        _gamePanel.Initialize();
-        _pausePanel.Initialize();
-        _losePanel.Initialize();
-        _menuPanel.Initialize();
-        _marketPanel.Initialize();
+        _gamePanel.Initialize(_panelAnimationConfig);
+        _pausePanel.Initialize(_panelAnimationConfig);
+        _losePanel.Initialize(_panelAnimationConfig);
+        _menuPanel.Initialize(_panelAnimationConfig);
+        _marketPanel.Initialize(_panelAnimationConfig);
 
         ChangePanel(_menuPanel);
         Subscribe();
