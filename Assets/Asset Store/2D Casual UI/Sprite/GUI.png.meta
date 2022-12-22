@@ -836,13 +836,13 @@ TextureImporter:
       name: GUI_27
       rect:
         serializedVersion: 2
-        x: 748
-        y: 529
+        x: 746
+        y: 528
         width: 1395
         height: 926
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 141, y: 208, z: 142, w: 153}
+      border: {x: 100, y: 100, z: 100, w: 100}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1600,12 +1600,12 @@ TextureImporter:
       GUI_45: 21300080
       GUI_62: 21300110
       GUI_16: 21300032
-      GUI_52: 21300090
       GUI_58: 21300102
-      GUI_10: 21300020
       GUI_7: 21300014
-      GUI_31: 21300062
+      GUI_10: 21300020
       GUI_8: 21300016
+      GUI_31: 21300062
+      GUI_52: 21300090
       GUI_60: 21300106
       GUI_28: 21300056
       GUI_5: 21300010

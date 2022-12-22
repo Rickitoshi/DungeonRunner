@@ -9,6 +9,7 @@ public class GameHelper : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera playCamera;
     [SerializeField] private CinemachineVirtualCamera lobbyCamera;
     [SerializeField] private CinemachineVirtualCamera marketCamera;
+    [SerializeField] private CinemachineVirtualCamera upgradeCamera;
     
     public static GameHelper Instance { get; private set; }
 
@@ -28,6 +29,9 @@ public class GameHelper : MonoBehaviour
                     break;
                 case CameraState.Market:
                     ChangeCamera(marketCamera);
+                    break;
+                case CameraState.Upgrade:
+                    ChangeCamera(upgradeCamera);
                     break;
             }
 
@@ -98,5 +102,6 @@ public enum CameraState
     None,
     Lobby,
     Run,
-    Market
+    Market,
+    Upgrade
 }

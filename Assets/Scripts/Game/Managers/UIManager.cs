@@ -2,6 +2,7 @@ using System;
 using Game.Player;
 using Game.Systems;
 using Game.UI.Common;
+using Game.UI.Panels;
 using Signals;
 using Zenject;
 
@@ -12,6 +13,7 @@ public class UIManager: IInitializable, IDisposable
     [Inject] private LosePanel _losePanel;
     [Inject] private MenuPanel _menuPanel;
     [Inject] private MarketPanel _marketPanel;
+    [Inject] private UpgradePanel _upgradePanel;
     [Inject] private AlwaysOnPanel _alwaysOnPanel;
     
     [Inject] private SignalBus _signalBus;
@@ -30,6 +32,7 @@ public class UIManager: IInitializable, IDisposable
         _losePanel.Initialize(_panelAnimationConfig);
         _menuPanel.Initialize(_panelAnimationConfig);
         _marketPanel.Initialize(_panelAnimationConfig);
+        _upgradePanel.Initialize(_panelAnimationConfig);
 
         ChangePanel(_menuPanel);
         Subscribe();
@@ -52,6 +55,7 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Subscribe<MarketSignal>(OnMarket);
         _signalBus.Subscribe<MagnetSignal>(OnMagnet);
         _signalBus.Subscribe<PlayerRespawnPhaseEndedSignal>(PlayerRespawnPhaseEnded);
+        _signalBus.Subscribe<UpgradeSignal>(OnUpgrade);
     }
 
     private void Unsubscribe()
@@ -66,6 +70,7 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Unsubscribe<MarketSignal>(OnMarket);
         _signalBus.Unsubscribe<MagnetSignal>(OnMagnet);
         _signalBus.Unsubscribe<PlayerRespawnPhaseEndedSignal>(PlayerRespawnPhaseEnded);
+        _signalBus.Unsubscribe<UpgradeSignal>(OnUpgrade);
     }
     
     private void OnMenu()
@@ -92,6 +97,12 @@ public class UIManager: IInitializable, IDisposable
         GameHelper.Instance.CameraState = CameraState.Run;
     }
 
+    private void OnUpgrade()
+    {
+        ChangePanel(_upgradePanel);
+        GameHelper.Instance.CameraState = CameraState.Upgrade;
+    }
+    
     private void OnPause()
     {
         ChangePanel(_pausePanel);

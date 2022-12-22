@@ -29,5 +29,6 @@ public class GameSceneInstaller : MonoInstaller
         Container.DeclareSignal<MagnetSignal>();
         Container.DeclareSignal<PlayerRespawnPhaseEndedSignal>();
         Container.DeclareSignal<BackToMenuSignal>();
+        Container.DeclareSignal<UpgradeSignal>();
     }
 }

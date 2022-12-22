@@ -1,5 +1,4 @@
 using System;
-using DG.Tweening;
 using Game.Systems;
 using Signals;
 using UnityEngine;

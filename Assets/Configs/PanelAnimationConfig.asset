@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65bcb1fdde240aa8b8c2515be833d59, type: 3}
   m_Name: PanelAnimationConfig
   m_EditorClassIdentifier: 
-  popUpStartScale: 0.6
+  popUpStartScale: 0.7
   popUpDurationScale: 0.25
-  panelDurationAlpha: 0.1
+  panelDurationAlpha: 0.15
