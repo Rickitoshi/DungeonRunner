@@ -1,5 +1,6 @@
 using System;
 using Game.Player;
+using Game.Player.Stats;
 using Game.Systems;
 using Game.UI.Common;
 using Game.UI.Panels;
@@ -13,14 +14,14 @@ public class UIManager: IInitializable, IDisposable
     [Inject] private LosePanel _losePanel;
     [Inject] private MenuPanel _menuPanel;
     [Inject] private MarketPanel _marketPanel;
-    [Inject] private UpgradePanel _upgradePanel;
+    [Inject] private UpgradesPanel _upgradesPanel;
     [Inject] private AlwaysOnPanel _alwaysOnPanel;
     
     [Inject] private SignalBus _signalBus;
     [Inject] private SaveManager _saveManager;
-    [Inject] private PlayerConfig _playerConfig;
+    [Inject] private StatsContainer _statsContainer;
     [Inject] private PanelAnimationConfig _panelAnimationConfig;
-    
+
     private BasePanel _currentPanel;
 
     public void Initialize()
@@ -32,7 +33,7 @@ public class UIManager: IInitializable, IDisposable
         _losePanel.Initialize(_panelAnimationConfig);
         _menuPanel.Initialize(_panelAnimationConfig);
         _marketPanel.Initialize(_panelAnimationConfig);
-        _upgradePanel.Initialize(_panelAnimationConfig);
+        _upgradesPanel.Initialize(_panelAnimationConfig);
 
         ChangePanel(_menuPanel);
         Subscribe();
@@ -50,7 +51,8 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Subscribe<PauseSignal>(OnPause);
         _signalBus.Subscribe<PlaySignal>(OnGame);
         _signalBus.Subscribe<PlayerDieSignal>(OnLose);
-        _signalBus.Subscribe<CoinsPickUpSignal>(AddCoins);
+        _signalBus.Subscribe<CoinsPickUpSignal>(OnAddCoins);
+        _signalBus.Subscribe<CoinsSpendSignal>(OnSpendCoins);
         _signalBus.Subscribe<ReliveSignal>(OnGame);
         _signalBus.Subscribe<MarketSignal>(OnMarket);
         _signalBus.Subscribe<MagnetSignal>(OnMagnet);
@@ -65,7 +67,8 @@ public class UIManager: IInitializable, IDisposable
         _signalBus.Unsubscribe<PauseSignal>(OnPause);
         _signalBus.Unsubscribe<PlaySignal>(OnGame);
         _signalBus.Unsubscribe<PlayerDieSignal>(OnLose);
-        _signalBus.Unsubscribe<CoinsPickUpSignal>(AddCoins);
+        _signalBus.Unsubscribe<CoinsPickUpSignal>(OnAddCoins);
+        _signalBus.Unsubscribe<CoinsSpendSignal>(OnSpendCoins);
         _signalBus.Unsubscribe<ReliveSignal>(OnGame);
         _signalBus.Unsubscribe<MarketSignal>(OnMarket);
         _signalBus.Unsubscribe<MagnetSignal>(OnMagnet);
@@ -99,7 +102,7 @@ public class UIManager: IInitializable, IDisposable
 
     private void OnUpgrade()
     {
-        ChangePanel(_upgradePanel);
+        ChangePanel(_upgradesPanel);
         GameHelper.Instance.CameraState = CameraState.Upgrade;
     }
     
@@ -129,12 +132,17 @@ public class UIManager: IInitializable, IDisposable
 
     private void OnMagnet()
     {
-        _gamePanel.Magnet.Start(_playerConfig.MagnetDuration);
+        _gamePanel.Magnet.Start(_statsContainer.Magnet);
     }
 
-    private void AddCoins(CoinsPickUpSignal signal)
+    private void OnAddCoins(CoinsPickUpSignal signal)
     {
         _alwaysOnPanel.CoinCounter.AddCoins(signal.Value);
+    }
+
+    private void OnSpendCoins(CoinsSpendSignal signal)
+    {
+        _alwaysOnPanel.CoinCounter.RemoveCoins(signal.Value);
     }
 
     private void ChangePanel(BasePanel panel)

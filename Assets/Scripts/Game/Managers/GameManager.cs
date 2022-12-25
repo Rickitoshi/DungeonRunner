@@ -20,6 +20,8 @@ public class GameManager: IInitializable,IDisposable
 
         _player.State = State.Idle;
         _coins = _saveManager.Data.Coins;
+        _signalBus.Fire(new CoinsCountChangeSignal(_coins));
+        
         Subscribe();
     }
 
@@ -33,7 +35,7 @@ public class GameManager: IInitializable,IDisposable
         _saveManager.SaveData();
     }
     
-    private  void Exit()
+    private void Exit()
     {
         Application.Quit();
         SaveData();
@@ -42,7 +44,8 @@ public class GameManager: IInitializable,IDisposable
     private void Subscribe()
     {
         _signalBus.Subscribe<PlayerDieSignal>(Lose);
-        _signalBus.Subscribe<CoinsPickUpSignal>(AddCoins);
+        _signalBus.Subscribe<CoinsPickUpSignal>(OnAddCoins);
+        _signalBus.Subscribe<CoinsSpendSignal>(OnSpendCoins);
         _signalBus.Subscribe<BackToLobbySignal>(Restart);
         _signalBus.Subscribe<PauseSignal>(Pause);
         _signalBus.Subscribe<PlaySignal>(Play);
@@ -55,7 +58,8 @@ public class GameManager: IInitializable,IDisposable
     private void Unsubscribe()
     {
         _signalBus.Unsubscribe<PlayerDieSignal>(Lose);
-        _signalBus.Unsubscribe<CoinsPickUpSignal>(AddCoins);
+        _signalBus.Unsubscribe<CoinsPickUpSignal>(OnAddCoins);
+        _signalBus.Unsubscribe<CoinsSpendSignal>(OnSpendCoins);
         _signalBus.Unsubscribe<BackToLobbySignal>(Restart);
         _signalBus.Unsubscribe<PauseSignal>(Pause);
         _signalBus.Unsubscribe<PlaySignal>(Play);
@@ -75,6 +79,7 @@ public class GameManager: IInitializable,IDisposable
         Time.timeScale = 1;
         
         _player.State = State.Run;
+        _player.UpdateStats();
 
         var properties = new Value
         {
@@ -118,11 +123,21 @@ public class GameManager: IInitializable,IDisposable
         Mixpanel.Track("Player die");
     }
 
-    private void AddCoins(CoinsPickUpSignal signal)
+    private void OnAddCoins(CoinsPickUpSignal signal)
     {
         if (signal.Value < 0) return;
         
         _coins += signal.Value;
         _saveManager.Data.Coins = _coins;
+
+        _signalBus.Fire(new CoinsCountChangeSignal(_coins));
+    }
+
+    private void OnSpendCoins(CoinsSpendSignal signal)
+    {
+        _coins -= signal.Value;
+        _saveManager.Data.Coins = _coins;
+
+        _signalBus.Fire(new CoinsCountChangeSignal(_coins));
     }
 }

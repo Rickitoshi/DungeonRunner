@@ -38,9 +38,11 @@ public class SaveManager : IInitializable
 public class SaveData
 {
     public int Coins;
+    public int[] LevelStatsIndex;
 
     public SaveData()
     {
         Coins = 0;
+        LevelStatsIndex = new int[15];
     }
 }

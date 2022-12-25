@@ -71,10 +71,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63857914902f4a78aaa8d5b2ab31ea7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5.5
-  strafeDuration: 0.35
-  strafeDistance: 1.5
-  jumpHeight: 1.5
   fallForceMultiplier: 0.6
   gravityValue: -12
 --- !u!114 &8091730594775578746
@@ -105,7 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0831bc5852b7455ba23e9e4912ed1665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
 --- !u!114 &2073360858289607664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,7 +118,7 @@ MonoBehaviour:
   declineAlive: 1.5
   declineDead: 0.8
   particleOffsetAlive: {x: 0, y: -0.5, z: 0}
-  particleOffsetDead: {x: 0, y: -0.5, z: -0.5}
+  particleOffsetDead: {x: 0, y: -0.48, z: -0.5}
 --- !u!114 &6860387395130301741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,7 +225,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   magneticRadius: 5
-  magnetDuration: 10
   itemMoveSpeed: 9
   mask:
     serializedVersion: 2

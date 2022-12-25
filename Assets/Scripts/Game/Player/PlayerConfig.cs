@@ -22,9 +22,6 @@ namespace Game.Player
         public float StrafeDistance => strafeDistance;
 
         public float JumpHeight => jumpHeight;
-
-        public int MaxHealth => maxHealth;
-
-        public float MagnetDuration => magnetDuration;
+        
     }
 }

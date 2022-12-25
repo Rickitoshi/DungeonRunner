@@ -1,4 +1,5 @@
 using Game.Player;
+using Game.Player.Stats;
 using Game.Systems;
 using Signals;
 using UnityEngine;
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private SignalBus _signalBus;
     private ParticlesManager _particlesManager;
     private PlayerConfig _config;
+    private StatsContainer _statsContainer;
 
     private StateManager _stateManager;
     private State _currentState;
@@ -48,12 +50,13 @@ public class PlayerController : MonoBehaviour
     private DeadState _deadState;
 
     [Inject]
-    private void Construct(InputHandler inputHandler,SignalBus signalBus,ParticlesManager particlesManager,PlayerConfig config)
+    private void Construct(InputHandler inputHandler,SignalBus signalBus,ParticlesManager particlesManager,PlayerConfig config, StatsContainer container)
     {
         _inputHandler = inputHandler;
         _signalBus = signalBus;
         _particlesManager = particlesManager;
         _config = config;
+        _statsContainer = container;
     }
     
     private void Awake()
@@ -71,8 +74,6 @@ public class PlayerController : MonoBehaviour
         _particlesManager.GetRunParticle(transform);
         
         playerMoveSystem.Initialize(_config.MoveSpeed,_config.StrafeDuration,_config.StrafeDistance,_config.JumpHeight);
-        healthSystem.Initialize(_config.MaxHealth);
-        magnetSystem.Initialize(_config.MagnetDuration);
     }
 
     private void OnDestroy()
@@ -127,6 +128,12 @@ public class PlayerController : MonoBehaviour
         _signalBus.Fire(new PlayerRespawnPhaseEndedSignal(phaseEnded));
     }
 
+    public void UpdateStats()
+    {
+        healthSystem.Initialize(_statsContainer.Health);
+        magnetSystem.Initialize(_statsContainer.Magnet);
+    }
+    
     public void Respawn()
     {
         healthSystem.Reset();

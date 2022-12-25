@@ -1,5 +1,6 @@
 using System;
 using Cinemachine;
+using Game.UI.Common;
 using Signals;
 using UnityEngine;
 using Zenject;
@@ -10,7 +11,7 @@ public class GameHelper : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera lobbyCamera;
     [SerializeField] private CinemachineVirtualCamera marketCamera;
     [SerializeField] private CinemachineVirtualCamera upgradeCamera;
-    
+
     public static GameHelper Instance { get; private set; }
 
     public CameraState CameraState
